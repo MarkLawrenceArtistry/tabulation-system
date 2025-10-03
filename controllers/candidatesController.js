@@ -77,4 +77,60 @@ const getCandidateImage = (req, res) => {
     })
 }
 
-module.exports = { createCandidate, getAllCandidates, getCandidateImage }
+// for UPDATE
+const updateCandidate = (req, res) => {
+    const { id } = req.params
+    const { full_name, course, section, school, category } = req.body
+
+    let query = `
+        UPDATE candidates
+        SET
+            full_name = COALESCE(?, full_name),
+            course = COALESCE(?, course),
+            section = COALESCE(?, section),
+            school = COALESCE(?, school),
+            category = COALESCE(?, category)
+    `;
+
+    let params = [full_name, course, section, school, category]
+
+    if(req.file) {
+        query += `, image = COALESCE(?, image)`
+        params.push(req.file.buffer)
+    }
+
+    query += ` WHERE id = ?`
+    params.push(id)
+
+    db.run(query, params, function(err) {
+        if(err) {
+            return res.status(500).json({success:false,data:err.message})
+        } 
+        
+        if(this.changes === 0) {
+            return res.status(404).json({success:false,data:"Candidate not found."})
+        } else {
+            return res.status(200).json({success:true,data:`Changes to this candidate id.${this.lastID}: ${this.changes}`})
+        }
+    })
+}
+
+const deleteCandidate = (req, res) => {
+    const { id } = req.params
+    const query = `DELETE FROM candidates WHERE id = ?`
+    const params = [id]
+
+    db.run(query, params, function(err) {
+        if(err) {
+            return res.status(500).json({success:false,data:err.message})
+        }
+
+        if(this.changes > 0) {
+            return res.status(200).json({success:true,data:`Candidate successfully deleted! Changes: ${this.changes}`})
+        } else {
+            return res.status(404).json({success:false,data:"Candidate not found."})
+        }
+    })
+}
+
+module.exports = { createCandidate, getAllCandidates, getCandidateImage, updateCandidate, deleteCandidate }
