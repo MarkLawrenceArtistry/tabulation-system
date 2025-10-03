@@ -1,0 +1,25 @@
+
+
+img {
+    height: 80px;
+}
+
+#candidates-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.candidate-box {
+    min-width: 150px;
+    background-color: gray;
+    padding: 15px;
+}
+
+.candidate-box input {
+    width: 85%;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+}
