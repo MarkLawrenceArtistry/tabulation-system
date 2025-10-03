@@ -9,11 +9,12 @@ const candidateRoutes = require('./routes/candidates')
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('public'))
 app.use('/api/candidates', candidateRoutes)
 initDB()
 
 app.listen(PORT, () => {
-    console.log(`The port is listening at https://localhost:${PORT}...`)
+    console.log(`The port is listening at localhost:${PORT}...`)
 })
 
 app.get('/', (req, res) => {
