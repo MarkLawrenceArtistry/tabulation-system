@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const criteriaSelect = document.querySelector('#criteria-select')
     const judgeScoresContainer = document.querySelector('#judge-scores-container')
 
-
+    // PORTIONS
+    const portionsContainer = document.querySelector('#portions-container')
 
 
 
@@ -41,6 +42,20 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(err)
         }
     }
+    async function loadPortions() {
+        try {
+            const portions = await api.fetchPortions()
+            ui.renderPortions(portions, portionsContainer)
+        } catch(err) {
+            console.error(err)
+        }
+    }
+
+
+
+
+    // PORTIONS
+
 
 
 
@@ -217,10 +232,24 @@ document.addEventListener('DOMContentLoaded', () => {
         loadCandidates()
     }
 
-    if(window.location.pathname.endsWith("admin-dashboard.html")) {
+    if(window.location.pathname.endsWith("admin-dashboard.html") && localStorage.getItem('role') === 'Admin') {
         loadJudgeScores()
     }
 
+    if(window.location.pathname.endsWith("portions.html") && localStorage.getItem('role') === 'Admin') {
+        loadPortions()
+    }
+
+
+    // GATEKEEPERS
+    if(window.location.pathname.endsWith("admin-dashboard.html") && localStorage.getItem('role') !== 'Admin') {
+        alert('You must be logged in as Admin to view this page. Redirecting..')
+        window.location.href = 'judges-dashboard.html'
+    }
+    if(window.location.pathname.endsWith("portions.html") && localStorage.getItem('role') !== 'Admin') {
+        alert('You must be logged in as Admin to view this page. Redirecting..')
+        window.location.href = 'portions.html'
+    }
     if(!window.location.pathname.endsWith('index.html') && !localStorage.getItem('isLoggedIn')) {
         alert('You must be logged in to view this page. Redirecting..')
         window.location.href = 'index.html'

@@ -81,3 +81,58 @@ export const renderScores = (scores, divContainer) => {
     
     divContainer.appendChild(table)
 }
+
+
+
+// PORTIONS
+export const renderPortions = (portions, divContainer) => {
+    divContainer.innerHTML = ``
+
+    if(portions.length === 0) {
+        divContainer.innerHTML = `<p style="text-align:center;">No portions found.</p>`
+        return 
+    }
+
+    const table = document.createElement('table')
+    table.className = 'table status'
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `
+    const tbody = table.querySelector('tbody')
+
+    portions.forEach(portion => {
+        const row = document.createElement('tr')
+        row.className = 'portion-item'
+        row.dataset.id = portion.id
+
+        let isPortionOpen = ''
+        if(portion.status !== 'open') {
+            isPortionOpen = `
+                <div class="action-buttons">
+                    <button class="btn open-btn">Start Portion</button>
+                </div>
+            `
+        }
+
+        row.innerHTML = `
+            <td>${portion.id}</td>
+            <td>${portion.name}</td>
+            <td>${portion.status}</td>
+            <td>
+                ${isPortionOpen}
+            </td>
+        `
+
+        tbody.appendChild(row)
+    });
+    
+    divContainer.appendChild(table)
+}

@@ -119,3 +119,20 @@ export async function deleteScore(scoreID) {
 
     return result.data
 }
+
+
+
+// PORTIONS
+export async function fetchPortions() {
+    const response = await fetch('api/portions')
+    if(!response.ok) {
+        throw new Error('Error fetching portions.')
+    }
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
+}
