@@ -87,3 +87,35 @@ export async function submitScores(scoresPayload) {
 
     return result.data
 }
+export async function fetchScores() {
+    const response = await fetch('api/scores')
+    if(!response.ok) {
+        throw new Error('Error fetching scores.')
+    }
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
+}
+export async function deleteScore(scoreID) {
+    const response = await fetch(`api/scores/${scoreID}`, {
+        method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    if(!response.ok) {
+        throw new Error('Error deleting score')
+    }
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
+}

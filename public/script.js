@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // SCORES, JUDGES DECLARATION
     const judgeScoresBtn = document.querySelector('#judge-scores-btn')
     const criteriaSelect = document.querySelector('#criteria-select')
+    const judgeScoresContainer = document.querySelector('#judge-scores-container')
 
 
 
@@ -28,6 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const candidates = await api.fetchCandidates()
             ui.renderCandidates(candidates, candidatesContainer)
+        } catch(err) {
+            console.error(err)
+        }
+    }
+    async function loadJudgeScores() {
+        try {
+            const scores = await api.fetchScores()
+            ui.renderScores(scores, judgeScoresContainer)
         } catch(err) {
             console.error(err)
         }
@@ -113,6 +122,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     }
+    if(judgeScoresContainer) {
+        judgeScoresContainer.addEventListener('click', async (e) => {
+            e.preventDefault()
+
+            const target = e.target
+            const scoreItem = target.closest('.score-item');
+            if (!scoreItem) return;
+
+            const scoreID = scoreItem.dataset.id
+
+            // for delete
+            if(target.classList.contains('delete-btn')) {
+                if(confirm('Are you sure you want to delete this specific score?')) {
+                    try {
+                        await api.deleteScore(scoreID)
+                        loadJudgeScores()
+                    } catch(err) {
+                        console.error(err)
+                    }
+                }
+            }
+        })
+    }
 
 
 
@@ -183,6 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // CALLERS
     if(window.location.pathname.endsWith("judges-dashboard.html")) {
         loadCandidates()
+    }
+
+    if(window.location.pathname.endsWith("admin-dashboard.html")) {
+        loadJudgeScores()
     }
 
     if(!window.location.pathname.endsWith('index.html') && !localStorage.getItem('isLoggedIn')) {
