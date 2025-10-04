@@ -2,36 +2,46 @@ const { db } = require('../database')
 
 // for POST 
 const createCandidate = (req, res) => {
-    const { portion_id, full_name, course, section, school, category } = req.body
+    let { portion_ids, full_name, course, section, school, category } = req.body;
 
-    if(!req.file) {
-        return res.status(400).json({success:false,data:"No image file uploaded."})
+    if (!req.file) {
+        return res.status(400).json({ success: false, data: "No image file uploaded." });
+    }
+    if (!portion_ids || portion_ids.length === 0) {
+        return res.status(400).json({ success: false, data: "At least one portion must be selected." });
     }
 
-    const image = req.file.buffer
+    const image = req.file.buffer;
+    const candidateQuery = `
+        INSERT INTO candidates (full_name, course, section, school, category, image)
+        VALUES (?, ?, ?, ?, ?, ?)
+    `;
+    const candidateParams = [full_name, course, section, school, category, image];
 
-    const query = `
-        INSERT INTO candidates (portion_id, full_name, course, section, school, category, image)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    `
-    const params = [portion_id, full_name, course, section, school, category, image]
-
-    db.run(query, params, function(err) {
-        if(err) {
-            res.status(500).json({success:false,data:err.message})
-        } else {
-            res.status(201).json({success:true,data:{
-                id: this.lastID,
-                portion_id: portion_id,
-                full_name: full_name,
-                course: course,
-                section: section,
-                school: school,
-                category: category
-            }})
+    db.run(candidateQuery, candidateParams, function(err) {
+        if (err) {
+            return res.status(500).json({ success: false, data: err.message });
         }
-    })
-}
+        
+        const candidateId = this.lastID;
+        const portionsToLink = Array.isArray(portion_ids) ? portion_ids : portion_ids.split(',');
+
+        const linkQuery = `INSERT INTO candidate_portions (candidate_id, portion_id) VALUES (?, ?)`;
+
+        db.serialize(() => {
+            db.run('BEGIN TRANSACTION');
+            portionsToLink.forEach(portionId => {
+                db.run(linkQuery, [candidateId, portionId]);
+            });
+            db.run('COMMIT', (commitErr) => {
+                if(commitErr) {
+                    return res.status(500).json({ success: false, data: "Failed to link candidate to portions: " + commitErr.message });
+                }
+                res.status(201).json({ success: true, data: { id: candidateId, full_name } });
+            });
+        });
+    });
+};
 
 // for GET
 const getAllCandidates = (re, res) => {
