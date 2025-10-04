@@ -35,6 +35,7 @@ export async function addCandidate(formData) {
 
 
 
+
 // AUTH
 export async function loginUser(credentials) {
     const response = await fetch('api/auth/login', {
@@ -193,4 +194,22 @@ export async function fetchPortionDetails(portionId) {
         throw new Error(result.data);
     }
     return result.data;
+}
+
+
+
+
+// CRITERIA
+export async function fetchCriteria() {
+    const response = await fetch('api/criteria')
+    if(!response.ok) {
+        throw new Error('Error fetching criteria.')
+    }
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
 }
