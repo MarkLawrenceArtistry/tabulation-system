@@ -12,16 +12,24 @@ const initDB = () => {
         const candidates = `
             CREATE TABLE IF NOT EXISTS candidates (
                 id INTEGER PRIMARY KEY,
-                portion_id INTEGER NOT NULL,
                 full_name TEXT NOT NULL,
                 course TEXT NOT NULL,
                 section TEXT NOT NULL,
                 school TEXT NOT NULL,
                 category TEXT NOT NULL,
-                image BLOB,
-                FOREIGN KEY (portion_id) REFERENCES portions (id)
+                image BLOB
             )
-        `
+        `;
+        
+        const candidate_portions = `
+            CREATE TABLE IF NOT EXISTS candidate_portions (
+                candidate_id INTEGER NOT NULL,
+                portion_id INTEGER NOT NULL,
+                FOREIGN KEY (candidate_id) REFERENCES candidates (id) ON DELETE CASCADE,
+                FOREIGN KEY (portion_id) REFERENCES portions (id) ON DELETE CASCADE,
+                PRIMARY KEY (candidate_id, portion_id)
+            )
+        `;
 
         const users = `
             CREATE TABLE IF NOT EXISTS users (
@@ -112,6 +120,14 @@ const initDB = () => {
                 console.log("scores TABLE CREATED/ALREADY EXISTS.")
             }
         })
+
+        db.run(candidate_portions, (err) => {
+            if(err) {
+                console.log("ERROR CREATING candidate_portions TABLE: " + err.message)
+            } else {
+                console.log("candidate_portions TABLE CREATED/ALREADY EXISTS.")
+            }
+        });
     })
 }
 
