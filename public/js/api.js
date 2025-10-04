@@ -153,3 +153,22 @@ export async function addPortion(data) {
 
     return result.data
 }
+export async function deletePortion(portionID) {
+    const response = await fetch(`api/portions/${portionID}`, {
+        method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    if(!response.ok) {
+        throw new Error('Error deleting portion')
+    }
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
+}

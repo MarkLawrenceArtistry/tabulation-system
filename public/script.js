@@ -77,6 +77,29 @@ document.addEventListener('DOMContentLoaded', () => {
             loadPortions()
         })
     }
+    if(portionsContainer) {
+        portionsContainer.addEventListener('click', async (e) => {
+            e.preventDefault()
+
+            const target = e.target
+            const portionItem = target.closest('.portion-item');
+            if (!portionItem) return;
+
+            const portionID = portionItem.dataset.id
+
+            // for delete
+            if(target.classList.contains('delete-btn')) {
+                if(confirm('Are you sure you want to delete this specific portion?')) {
+                    try {
+                        await api.deletePortion(portionID)
+                        loadPortions()
+                    } catch(err) {
+                        console.error(err)
+                    }
+                }
+            }
+        })
+    }
 
 
 
