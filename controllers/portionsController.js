@@ -112,7 +112,12 @@ const deletePortion = (req, res) => {
 const getPortionDetails = (req, res) => {
     const { id } = req.params;
     const portionQuery = `SELECT * FROM portions WHERE id = ?`;
-    const candidatesQuery = `SELECT id, full_name, course, section, school, category FROM candidates WHERE portion_id = ?`;
+    const candidatesQuery = `
+        SELECT c.id, c.full_name, c.course, c.section, c.school, c.category
+        FROM candidates c
+        JOIN candidate_portions cp ON c.id = cp.candidate_id
+        WHERE cp.portion_id = ?
+    `;
     const criteriaQuery = `SELECT id, name, max_score FROM criteria WHERE portion_id = ?`;
 
     let responseData = {};
