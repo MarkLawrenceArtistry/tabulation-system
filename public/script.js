@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // AUTH DECLARATIONS
     const loginForm = document.querySelector('#login-form')
-
+    const registerForm = document.querySelector('#register-form')
 
     
     // INITIALIZERS
@@ -47,6 +47,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     alert(result.data || 'Wrong credentials')
                     loginForm.reset()
+                }
+            } catch (err) {
+                alert('Wrong credentials')
+                loginForm.reset()
+                console.error(err)
+            }
+        })
+    }
+    if(registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            const credentials = {
+                username: document.querySelector('#username-register').value,
+                password: document.querySelector('#password-register').value,
+                full_name: document.querySelector('#fullname').value,
+                role: document.querySelector('#role').value
+            }
+
+            try {
+                const result = await api.registerUser(credentials)
+
+                if(result.success) {
+                    alert('Succesfully registered!')
+                    registerForm.reset()
+                    return
+                } else {
+                    alert(result.data)
+                    registerForm.reset()
                 }
             } catch (err) {
                 alert('Wrong credentials')
