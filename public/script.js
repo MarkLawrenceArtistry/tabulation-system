@@ -20,13 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // PORTIONS
     const judgePortionsContainer = document.querySelector('#portions-container');
     const portionsForm = document.querySelector("#add-portion-form")
+    const portionsContainer = document.querySelector('#portions-container')
     const portionBtnContainer = document.querySelector('#portions')
 
     // CRITERIA DECLARATIONS
     const criteriaContainer = document.querySelector('#criteria-container')
+    const addCriteriaForm = document.querySelector('#add-criteria-form')
 
     // OTHER DECLARATIONS
-    let currentCandidates = []
 
 
 
@@ -179,7 +180,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // CRITERIA
+    if(addCriteriaForm) {
+        addCriteriaForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
 
+            const data = {
+                portion_id: document.querySelector('#criteria-portion-id').value,
+                name: document.querySelector('#criteria-name').value,
+                max_score: document.querySelector('#criteria-max-score').value,
+            }
+
+            try {
+                await api.addCriteria(data)
+                alert('Added criteria successfully')
+            } catch(err) {
+                console.error(err)
+            }
+
+            loadCriteria()
+        })
+    }
+    if(criteriaContainer) {
+        criteriaContainer.addEventListener('click', async (e) => {
+            
+        })
+    }
 
 
 
@@ -305,7 +330,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('role', result.data.role)
                     localStorage.setItem('judge_id', result.data.id)
                     alert('Welcome back!')
-                    window.location.href = 'judges-dashboard.html'
+                    if(result.data.role === 'Judge') {
+                        window.location.href = 'judges-dashboard.html'
+                    } else if(result.data.role === 'Admin') {
+                        window.location.href = 'admin-dashboard.html'
+                    }
                 } else {
                     alert(result.data || 'Wrong credentials')
                     loginForm.reset()
@@ -361,6 +390,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if(window.location.pathname.endsWith("portions.html") && localStorage.getItem('role') === 'Admin') {
         loadPortions()
+    }
+
+    if(window.location.pathname.endsWith("criteria.html") && localStorage.getItem('role') === 'Admin') {
+        loadCriteria()
     }
 
 

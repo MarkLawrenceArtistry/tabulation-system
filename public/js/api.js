@@ -213,3 +213,20 @@ export async function fetchCriteria() {
 
     return result.data
 }
+export async function addCriteria(data) {
+    const response = await fetch(`api/criteria/`, {
+        method: 'POST',
+        headers: { "Content-Type": 'application/json' },
+        body: JSON.stringify(data)
+    })
+    if(!response.ok) {
+        throw new Error('Error adding criteria.')
+    }
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
+}
