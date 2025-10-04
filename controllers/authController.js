@@ -2,15 +2,15 @@ const { db } = require('../database')
 const bcrypt = require('bcrypt')
 
 const register = (req, res) => {
-    const { username, password_hash, full_name, role } = req.body
+    const { username, password, full_name, role } = req.body
 
-    if(!username || !password_hash) {
+    if(!username || !password) {
         return res.status(400).json({success:false,data:"Username and password are required."})
     }
 
     // hashing
     // (password, salt value)
-    bcrypt.hash(password_hash, 10, (err, hash) => {
+    bcrypt.hash(password, 10, (err, hash) => {
         if(err) {
             return res.status(500).json({success:false,data:"Error: Hashing password failed."})
         }
@@ -32,9 +32,9 @@ const register = (req, res) => {
 }
 
 const login = (req, res) => {
-    const { username, password_hash } = req.body
+    const { username, password } = req.body
 
-    if(!username || !password_hash) {
+    if(!username || !password) {
         return res.status(400).json({success:false,data:"Username and password are required."})
     }
 
@@ -50,13 +50,13 @@ const login = (req, res) => {
             return res.status(401).json({success:false,data:"Invalid username or password."})
         }
 
-        bcrypt.compare(password_hash, user.password_hash, (err, result) => {
+        bcrypt.compare(password, user.password_hash, (err, result) => {
             if(err) {
                 return res.status(500).json({success:false,data:"Error: Comparing passwords failed."})
             }
 
             if(result) {
-                return res.status(200).json({success:true,data:"LOGIN SUCCESSFUL."})
+                return res.status(200).json({success:true,data:user})
             } else {
                 return res.status(401).json({success:false,data:"Invalid username or password."})
             }
