@@ -8,5 +8,4 @@ router.get('/:id/', portionsController.getPortion)
 router.put('/:id/', portionsController.updatePortion)
 router.delete('/:id/', portionsController.deletePortion)
 
-
 module.exports = router
