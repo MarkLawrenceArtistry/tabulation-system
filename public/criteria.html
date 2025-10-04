@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Criteria</title>
+</head>
+<body>
+    <h1>Manage Criteria</h1>
+    <form id="add-criteria-form">
+        <div>
+            <label>Criteria Name</label>
+            <input type="text" id="criteria-name" placeholder="Enter your criteria" required>
+        </div>
+        <div>
+            <label>Portion ID</label>
+            <input type="text" id="criteria-portion-id" placeholder="Enter your portion id" required>
+        </div>
+        <div>
+            <label>Max Score</label>
+            <input type="text" id="criteria-max-score" placeholder="Enter your criteria max score" required>
+        </div>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+
+    <hr></hr>
+
+    <div id="criterias-container">
+
+    </div>
+    <script src="script.js" type="module"></script>
+</body>
+</html>
