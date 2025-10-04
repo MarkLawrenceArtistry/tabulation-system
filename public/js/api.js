@@ -119,6 +119,17 @@ export async function deleteScore(scoreID) {
 
     return result.data
 }
+export async function fetchJudgeProgress(judgeId) {
+    const response = await fetch(`api/judges/${judgeId}/progress`);
+    if (!response.ok) {
+        throw new Error('Error fetching judge progress.');
+    }
+    const result = await response.json();
+    if (!result.success) {
+        throw new Error(result.data);
+    }
+    return result.data;
+}
 
 
 
@@ -171,4 +182,15 @@ export async function deletePortion(portionID) {
     }
 
     return result.data
+}
+export async function fetchPortionDetails(portionId) {
+    const response = await fetch(`api/portions/${portionId}/details`);
+    if (!response.ok) {
+        throw new Error('Error fetching portion details.');
+    }
+    const result = await response.json();
+    if (!result.success) {
+        throw new Error(result.data);
+    }
+    return result.data;
 }

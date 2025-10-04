@@ -86,7 +86,7 @@ const updateCandidate = (req, res) => {
     let query = `
         UPDATE candidates
         SET
-            portion_id = COALESCE(?, portion_id)
+            portion_id = COALESCE(?, portion_id),
             full_name = COALESCE(?, full_name),
             course = COALESCE(?, course),
             section = COALESCE(?, section),

@@ -72,8 +72,8 @@ const updateCriteria = (req, res) => {
     const query = `
         UPDATE criteria
         SET
-            portion_id = COALESCE(?, portion_id)
-            name = COALESCE(?, name)
+            portion_id = COALESCE(?, portion_id),
+            name = COALESCE(?, name),
             max_score = COALESCE(?, max_score)
         WHERE id = ?
     `

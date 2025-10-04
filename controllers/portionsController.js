@@ -109,4 +109,35 @@ const deletePortion = (req, res) => {
     })
 }
 
-module.exports = { createPortion, getAllPortions, getPortion, updatePortion, deletePortion }
+const getPortionDetails = (req, res) => {
+    const { id } = req.params;
+    const portionQuery = `SELECT * FROM portions WHERE id = ?`;
+    const candidatesQuery = `SELECT id, full_name, course, section, school, category FROM candidates WHERE portion_id = ?`;
+    const criteriaQuery = `SELECT id, name, max_score FROM criteria WHERE portion_id = ?`;
+
+    let responseData = {};
+
+    db.get(portionQuery, [id], (err, portion) => {
+        if (err) return res.status(500).json({ success: false, data: err.message });
+        if (!portion) return res.status(404).json({ success: false, data: "Portion not found." });
+        responseData.portion = portion;
+
+        db.all(candidatesQuery, [id], (err, candidates) => {
+            if (err) return res.status(500).json({ success: false, data: err.message });
+            
+            // Add the imageUrl to each candidate, just like in getAllCandidates
+            responseData.candidates = candidates.map(c => ({
+                ...c,
+                imageUrl: `api/candidates/${c.id}/image`
+            }));
+
+            db.all(criteriaQuery, [id], (err, criteria) => {
+                if (err) return res.status(500).json({ success: false, data: err.message });
+                responseData.criteria = criteria;
+                res.status(200).json({ success: true, data: responseData });
+            });
+        });
+    });
+};
+
+module.exports = { createPortion, getAllPortions, getPortion, updatePortion, deletePortion, getPortionDetails }

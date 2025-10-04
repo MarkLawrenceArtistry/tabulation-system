@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const judgeScoresContainer = document.querySelector('#judge-scores-container')
 
     // PORTIONS
-    const portionsContainer = document.querySelector('#portions-container')
+    const judgePortionsContainer = document.querySelector('#portions-container');
     const portionsForm = document.querySelector("#add-portion-form")
     const portionBtnContainer = document.querySelector('#portions')
 
@@ -55,6 +55,42 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(err)
         }
     }
+    async function initializeJudgeDashboard() {
+        if (!judgePortionsContainer) return;
+
+        const judgeId = localStorage.getItem('judge_id');
+        if (!judgeId) {
+            alert('Could not identify judge. Please log in again.');
+            return;
+        }
+
+        try {
+            const [allPortions, progress] = await Promise.all([
+                api.fetchPortions(),
+                api.fetchJudgeProgress(judgeId)
+            ]);
+            
+            const completedPortionIds = progress.completed_portions;
+
+            judgePortionsContainer.innerHTML = ''; 
+            allPortions.forEach(portion => {
+                const isCompleted = completedPortionIds.includes(portion.id);
+                const button = document.createElement('button');
+                button.className = 'portions-btn';
+                button.dataset.portionId = portion.id;
+                button.textContent = portion.name;
+                if (isCompleted) {
+                    button.disabled = true;
+                    button.textContent += ' ✔️';
+                }
+                judgePortionsContainer.appendChild(button);
+            });
+
+        } catch (err) {
+            console.error('Failed to initialize judge dashboard:', err);
+            judgePortionsContainer.innerHTML = '<p>Could not load event portions.</p>';
+        }
+    }
 
 
 
@@ -81,28 +117,41 @@ document.addEventListener('DOMContentLoaded', () => {
             loadPortions()
         })
     }
-    if(portionsContainer) {
-        portionsContainer.addEventListener('click', async (e) => {
-            e.preventDefault()
+    if(judgePortionsContainer) {
+        judgePortionsContainer.addEventListener('click', async (e) => {
+            if (e.target.matches('.portions-btn')) {
+                const portionId = e.target.dataset.portionId;
+                const candidatesContainer = document.querySelector('#candidates-container');
+                const candidatesHeader = document.querySelector('#candidates-header');
+                const criteriaSelect = document.querySelector('#criteria-select');
+                const portionTitle = document.querySelector('#portion-title');
+                const submitContainer = document.querySelector('#submit-container');
 
-            const target = e.target
-            const portionItem = target.closest('.portion-item');
-            if (!portionItem) return;
+                try {
+                    const details = await api.fetchPortionDetails(portionId);
 
-            const portionID = portionItem.dataset.id
+                    portionTitle.textContent = `Portion: ${details.portion.name}`;
 
-            // for delete
-            if(target.classList.contains('delete-btn')) {
-                if(confirm('Are you sure you want to delete this specific portion?')) {
-                    try {
-                        await api.deletePortion(portionID)
-                        loadPortions()
-                    } catch(err) {
-                        console.error(err)
-                    }
+                    criteriaSelect.innerHTML = '<option value="">--Please choose a criterion--</option>';
+                    details.criteria.forEach(crit => {
+                        const option = document.createElement('option');
+                        option.value = crit.id;
+                        option.textContent = `${crit.name} (Max: ${crit.max_score})`;
+                        criteriaSelect.appendChild(option);
+                    });
+
+                    ui.renderCandidatesForJudging(details.candidates, candidatesContainer);
+
+                    candidatesHeader.style.display = 'block';
+                    candidatesContainer.style.display = 'flex';
+                    submitContainer.style.display = 'block';
+
+                } catch (err) {
+                    console.error(`Failed to load details for portion ${portionId}:`, err);
+                    alert('Could not load details for this portion.');
                 }
             }
-        })
+        });
     }
     if(portionBtnContainer) {
         portionBtnContainer.addEventListener('click', (e) => {
@@ -293,13 +342,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // CALLERS
-    let portionIdFilter = JSON.parse(localStorage.getItem('portion'))
-    let judgesDashboard = window.location.pathname.endsWith("judges-dashboard.html") 
-    // for sportswear
-    if(judgesDashboard && portionIdFilter === 1) {
-        loadCandidates(portionIdFilter)
-    } else if (judgesDashboard && portionIdFilter === 2) {
-        loadCandidates(portionIdFilter)
+    if (window.location.pathname.endsWith("judges-dashboard.html")) {
+        initializeJudgeDashboard();
     }
 
     if(window.location.pathname.endsWith("admin-dashboard.html") && localStorage.getItem('role') === 'Admin') {

@@ -7,5 +7,6 @@ router.get('/', portionsController.getAllPortions)
 router.get('/:id/', portionsController.getPortion)
 router.put('/:id/', portionsController.updatePortion)
 router.delete('/:id/', portionsController.deletePortion)
+router.get('/:id/details', portionsController.getPortionDetails);
 
 module.exports = router

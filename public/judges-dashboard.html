@@ -8,25 +8,22 @@
 </head>
 <body>
     <h1>Foundation Day Event</h1>
-    <div id="portions">
-        <button class="portions-btn">Sportswear</button>
-        <button class="portions-btn">Swimwear</button>
+
+    <div id="portions-container">
+
     </div>
 
     <div id="candidates-header" style="display: none;">
-        <h3 id="1">Portion: Sportswear</h3>
+        <h3 id="portion-title"></h3>
         <select id="criteria-select">
-            <option value="">--Please choose an option--</option>
-            <option value="1">Talent</option>
-            <option value="3">Poise</option>
+            <option value="">--Please choose a criterion--</option>
         </select>
     </div>
-    <div id="candidates-container" style="display: none;">
+    
+    <div id="candidates-container" style="display: none;"></div>
 
-    </div>
-
-    <div>
-        <button id="judge-scores-btn">Submit</button>
+    <div id="submit-container" style="display: none;">
+        <button id="judge-scores-btn">Submit Scores</button>
     </div>
 
     <script src="script.js" type="module"></script>

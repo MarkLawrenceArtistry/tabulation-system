@@ -36,6 +36,31 @@ export const renderCandidates = (candidates, divContainer, portionIdFilter) => {
         
     });
 }
+export const renderCandidatesForJudging = (candidates, divContainer) => {
+    divContainer.innerHTML = '';
+
+    if (candidates.length === 0) {
+        divContainer.innerHTML = `<p style="text-align:center;">No candidates found for this portion.</p>`;
+        return;
+    }
+
+    candidates.forEach(candidate => {
+        const candidateBox = document.createElement('div');
+        candidateBox.className = 'candidate-box box';
+        candidateBox.dataset.id = candidate.id;
+
+        candidateBox.innerHTML = `
+            <img src="${candidate.imageUrl}">
+            <h1>${candidate.full_name}</h1>
+            <p>${candidate.course}</p>
+            <div>
+                <input type="number" class="score-input" placeholder="Enter score">
+            </div>
+        `;
+
+        divContainer.appendChild(candidateBox);
+    });
+};
 
 
 
