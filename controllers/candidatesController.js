@@ -11,10 +11,10 @@ const createCandidate = (req, res) => {
     const image = req.file.buffer
 
     const query = `
-        INSERT INTO candidates (full_name, course, section, school, category, image)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO candidates (portion_id, full_name, course, section, school, category, image)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     `
-    const params = [full_name, course, section, school, category, image]
+    const params = [portion_id, full_name, course, section, school, category, image]
 
     db.run(query, params, function(err) {
         if(err) {
@@ -22,6 +22,7 @@ const createCandidate = (req, res) => {
         } else {
             res.status(201).json({success:true,data:{
                 id: this.lastID,
+                portion_id: portion_id,
                 full_name: full_name,
                 course: course,
                 section: section,
@@ -80,11 +81,12 @@ const getCandidateImage = (req, res) => {
 // for UPDATE
 const updateCandidate = (req, res) => {
     const { id } = req.params
-    const { full_name, course, section, school, category } = req.body
+    const { portion_id, full_name, course, section, school, category } = req.body
 
     let query = `
         UPDATE candidates
         SET
+            portion_id = COALESCE(?, portion_id)
             full_name = COALESCE(?, full_name),
             course = COALESCE(?, course),
             section = COALESCE(?, section),
@@ -92,7 +94,7 @@ const updateCandidate = (req, res) => {
             category = COALESCE(?, category)
     `;
 
-    let params = [full_name, course, section, school, category]
+    let params = [portion_id, full_name, course, section, school, category]
 
     if(req.file) {
         query += `, image = COALESCE(?, image)`
@@ -115,6 +117,7 @@ const updateCandidate = (req, res) => {
     })
 }
 
+// for DELETE
 const deleteCandidate = (req, res) => {
     const { id } = req.params
     const query = `DELETE FROM candidates WHERE id = ?`
