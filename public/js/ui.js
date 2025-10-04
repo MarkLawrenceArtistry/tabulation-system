@@ -26,6 +26,56 @@ export const renderCandidatesForJudging = (candidates, divContainer) => {
         divContainer.appendChild(candidateBox);
     });
 };
+export const renderCandidatesTable = (candidates, container, onEdit, onDelete) => {
+    container.innerHTML = '';
+    if (candidates.length === 0) {
+        container.innerHTML = '<p>No candidates have been added yet.</p>';
+        return;
+    }
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Course</th>
+                <th>School</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
+    const tbody = table.querySelector('tbody');
+
+    candidates.forEach(candidate => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><img src="${candidate.imageUrl}" alt="${candidate.full_name}" style="width: 50px; height: auto;"></td>
+            <td>${candidate.full_name}</td>
+            <td>${candidate.course}</td>
+            <td>${candidate.school}</td>
+            <td>
+                <button class="edit-btn" data-id="${candidate.id}">Edit</button>
+                <button class="delete-btn" data-id="${candidate.id}">Delete</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    container.appendChild(table);
+
+    container.addEventListener('click', (e) => {
+        if (e.target.classList.contains('edit-btn')) {
+            const id = e.target.dataset.id;
+            onEdit(id);
+        }
+        if (e.target.classList.contains('delete-btn')) {
+            const id = e.target.dataset.id;
+            onDelete(id);
+        }
+    });
+};
 
 
 
@@ -138,6 +188,21 @@ export const renderPortions = (portions, divContainer) => {
     
     divContainer.appendChild(table)
 }
+export const renderPortionCheckboxes = (portions, container) => {
+    container.innerHTML = '';
+    if (portions.length === 0) {
+        container.innerHTML = '<p>No portions found. Please create one first.</p>';
+        return;
+    }
+    portions.forEach(portion => {
+        const label = document.createElement('label');
+        label.innerHTML = `
+            <input type="checkbox" name="portion_ids" value="${portion.id}">
+            ${portion.name}
+        `;
+        container.appendChild(label);
+    });
+};
 
 
 

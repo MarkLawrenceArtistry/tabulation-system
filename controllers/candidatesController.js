@@ -44,9 +44,9 @@ const createCandidate = (req, res) => {
 };
 
 // for GET
-const getAllCandidates = (re, res) => {
+const getAllCandidates = (req, res) => {
     const query = `
-        SELECT id, portion_id, full_name, course, section, school, category
+        SELECT id, full_name, course, section, school, category
         FROM candidates
     `
 
@@ -90,56 +90,67 @@ const getCandidateImage = (req, res) => {
 
 // for UPDATE
 const updateCandidate = (req, res) => {
-    const { id } = req.params
-    const { portion_id, full_name, course, section, school, category } = req.body
+    const { id } = req.params;
+    const { portion_ids, full_name, course, section, school, category } = req.body;
 
-    let query = `
-        UPDATE candidates
-        SET
-            portion_id = COALESCE(?, portion_id),
-            full_name = COALESCE(?, full_name),
-            course = COALESCE(?, course),
-            section = COALESCE(?, section),
-            school = COALESCE(?, school),
-            category = COALESCE(?, category)
-    `;
+    db.serialize(() => {
+        db.run('BEGIN TRANSACTION');
 
-    let params = [portion_id, full_name, course, section, school, category]
+        let updateQuery = `
+            UPDATE candidates
+            SET
+                full_name = COALESCE(?, full_name),
+                course = COALESCE(?, course),
+                section = COALESCE(?, section),
+                school = COALESCE(?, school),
+                category = COALESCE(?, category)
+        `;
+        let params = [full_name, course, section, school, category];
 
-    if(req.file) {
-        query += `, image = COALESCE(?, image)`
-        params.push(req.file.buffer)
-    }
-
-    query += ` WHERE id = ?`
-    params.push(id)
-
-    db.run(query, params, function(err) {
-        if(err) {
-            return res.status(500).json({success:false,data:err.message})
-        } 
-        
-        if(this.changes === 0) {
-            return res.status(404).json({success:false,data:"Candidate not found."})
-        } else {
-            return res.status(200).json({success:true,data:`Changes to this candidate id.${this.lastID}: ${this.changes}`})
+        if (req.file) {
+            updateQuery += `, image = ?`;
+            params.push(req.file.buffer);
         }
-    })
-}
+
+        updateQuery += ` WHERE id = ?`;
+        params.push(id);
+
+        db.run(updateQuery, params);
+
+        if (portion_ids) {
+            const deleteLinksQuery = `DELETE FROM candidate_portions WHERE candidate_id = ?`;
+            db.run(deleteLinksQuery, [id]);
+
+            const portionsToLink = Array.isArray(portion_ids) ? portion_ids : portion_ids.split(',');
+            const insertLinkQuery = `INSERT INTO candidate_portions (candidate_id, portion_id) VALUES (?, ?)`;
+            portionsToLink.forEach(portionId => {
+                if (portionId) {
+                    db.run(insertLinkQuery, [id, parseInt(portionId)]);
+                }
+            });
+        }
+
+        db.run('COMMIT', (err) => {
+            if (err) {
+                db.run('ROLLBACK');
+                return res.status(500).json({ success: false, data: "Transaction failed: " + err.message });
+            }
+            res.status(200).json({ success: true, data: `Successfully updated candidate ID: ${id}` });
+        });
+    });
+};
 
 // for DELETE
 const deleteCandidate = (req, res) => {
     const { id } = req.params
     const query = `DELETE FROM candidates WHERE id = ?`
-    const params = [id]
 
-    db.run(query, params, function(err) {
+    db.run(query, [id], function(err) {
         if(err) {
             return res.status(500).json({success:false,data:err.message})
         }
-
         if(this.changes > 0) {
-            return res.status(200).json({success:true,data:`Candidate successfully deleted! Changes: ${this.changes}`})
+            return res.status(200).json({success:true,data:`Candidate successfully deleted!`})
         } else {
             return res.status(404).json({success:false,data:"Candidate not found."})
         }

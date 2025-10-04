@@ -4,9 +4,13 @@ import * as api from './js/api.js'
 document.addEventListener('DOMContentLoaded', () => {
 
     // CANDIDATES DECLARATIONS
-    const candidatesContainer = document.querySelector('#candidates-container')
-    const candidatesForm = document.querySelector('#register-candidate-form')
-    const candidatesHeader = document.querySelector('#candidates-header')
+    const candidateForm = document.querySelector('#candidate-form');
+    const portionsCheckboxesContainer = document.querySelector('#portions-checkboxes');
+    const candidatesTableContainer = document.querySelector('#candidates-table');
+    const formTitle = document.querySelector('#form-title');
+    const submitBtn = document.querySelector('#submit-btn');
+    const cancelBtn = document.querySelector('#cancel-btn');
+    const candidateIdInput = document.querySelector('#candidate-id');
 
     // AUTH DECLARATIONS
     const loginForm = document.querySelector('#login-form')
@@ -21,14 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const judgePortionsContainer = document.querySelector('#portions-container');
     const portionsForm = document.querySelector("#add-portion-form")
     const portionsContainer = document.querySelector('#portions-container')
-    const portionBtnContainer = document.querySelector('#portions')
 
     // CRITERIA DECLARATIONS
     const criteriaContainer = document.querySelector('#criteria-container')
     const addCriteriaForm = document.querySelector('#add-criteria-form')
 
     // OTHER DECLARATIONS
-
+    let allCandidates = [];
 
 
 
@@ -94,6 +97,24 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(err)
         }
     }
+    async function loadCandidatesAsAdmin() {
+        try {
+            const [portions, candidates] = await Promise.all([
+                api.fetchPortions(),
+                api.fetchCandidates()
+            ]);
+            
+            allCandidates = candidates;
+
+            ui.renderPortionCheckboxes(portions, portionsCheckboxesContainer);
+            ui.renderCandidatesTable(candidates, candidatesTableContainer, handleEdit, handleDelete);
+            
+            resetForm();
+        } catch (err) {
+            console.error('Failed to load page data:', err);
+            candidatesTableContainer.innerHTML = `<p>Error loading data: ${err.message}</p>`;
+        }
+    }
 
 
 
@@ -157,22 +178,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    if(portionBtnContainer) {
-        portionBtnContainer.addEventListener('click', (e) => {
+    if(portionsContainer) {
+        portionsContainer.addEventListener('click', async (e) => {
             e.preventDefault()
 
-            let portionBtn = document.querySelectorAll('.portions-btn')
-        
-            if(portionBtn.textContent === 'Sportswear') {
-                localStorage.remove('portion')
-                localStorage.setItem('portion', JSON.stringify(1));
-            } else if (portionBtn.textContent === 'Swimwear') {
-                localStorage.remove('portion')
-                localStorage.setItem('portion', JSON.stringify(2));
-            }
+            const target = e.target
+            const portionItem = target.closest('.portion-item');
+            if (!portionItem) return;
 
-            candidatesContainer.style.display = 'flex'
-            candidatesHeader.style.display = 'block'
+            const portionID = portionItem.dataset.id
+
+            // for delete
+            if(target.classList.contains('delete-btn')) {
+                if(confirm('Are you sure you want to delete this specific portion?')) {
+                    try {
+                        await api.deletePortion(portionID)
+                        loadPortions()
+                    } catch(err) {
+                        console.error(err)
+                    }
+                }
+            }
         })
     }
 
@@ -202,7 +228,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if(criteriaContainer) {
         criteriaContainer.addEventListener('click', async (e) => {
-            
+            e.preventDefault()
+
+            const target = e.target
+            const criterionItem = target.closest('.criterion-item');
+            if (!criterionItem) return;
+
+            const criterionID = criterionItem.dataset.id
+
+            // for delete
+            if(target.classList.contains('delete-btn')) {
+                if(confirm('Are you sure you want to delete this specific criteria?')) {
+                    try {
+                        await api.deleteCriteria(criterionID)
+                        loadCriteria()
+                    } catch(err) {
+                        console.error(err)
+                    }
+                }
+            }
         })
     }
 
@@ -210,24 +254,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // CANDIDATES
-    if(candidatesForm) {
-        candidatesForm.addEventListener('submit', async (e) => {
-            e.preventDefault()
+    if(candidateForm) {
+        candidateForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-            const formData = new FormData(candidatesForm)
+            const formData = new FormData(candidateForm);
+            const id = candidateIdInput.value;
+
+            if (!id && !formData.get('image').name) {
+                alert('Image is required for new candidates.');
+                return;
+            }
 
             try {
-                const result = await api.addCandidate(formData)
-                console.log(result)
-
-                alert('Succesfully registered!')
-                candidatesForm.reset()
-            } catch(err) {
-                console.error('Adding candidate failed:', err, result.data);
-                alert('Adding candidate failed: An error occurred during the process. Check your console.');
+                if (id) {
+                    await api.updateCandidate(id, formData);
+                    alert('Candidate updated successfully!');
+                } else {
+                    await api.addCandidate(formData);
+                    alert('Candidate added successfully!');
+                }
+                resetForm();
+                loadCandidatesAsAdmin();
+            } catch (err) {
+                console.error('Form submission failed:', err);
+                alert(`Error: ${err.message}`);
             }
-        })
+        });
     }
+    const resetForm = () => {
+        candidateForm.reset();
+        candidateIdInput.value = '';
+        formTitle.textContent = 'Add New Candidate';
+        submitBtn.textContent = 'Add Candidate';
+        cancelBtn.style.display = 'none';
+        document.querySelector('#image').required = true; 
+    };
+    const populateFormForEdit = (id) => {
+        const candidate = allCandidates.find(c => c.id == id);
+        if (!candidate) return;
+
+        candidateIdInput.value = candidate.id;
+        document.querySelector('#full_name').value = candidate.full_name;
+        document.querySelector('#course').value = candidate.course;
+        document.querySelector('#section').value = candidate.section;
+        document.querySelector('#school').value = candidate.school;
+        document.querySelector('#category').value = candidate.category;
+
+        formTitle.textContent = `Editing: ${candidate.full_name}`;
+        submitBtn.textContent = 'Update Candidate';
+        cancelBtn.style.display = 'inline-block';
+        document.querySelector('#image').required = false;
+
+        window.scrollTo(0, 0);
+    };
+    const handleEdit = (id) => {
+        populateFormForEdit(id);
+    };
+    const handleDelete = async (id) => {
+        if (confirm('Are you sure you want to delete this candidate? This cannot be undone.')) {
+            try {
+                await api.deleteCandidate(id);
+                alert('Candidate deleted successfully!');
+                loadCandidatesAsAdmin();
+            } catch (err) {
+                console.error('Deletion failed:', err);
+                alert(`Error: ${err.message}`);
+            }
+        }
+    };
+    cancelBtn.addEventListener('click', resetForm);
 
 
 
@@ -380,7 +476,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // CALLERS
-    if (window.location.pathname.endsWith("judges-dashboard.html")) {
+    if(window.location.pathname.endsWith("judges-dashboard.html")) {
         initializeJudgeDashboard();
     }
 
@@ -395,6 +491,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if(window.location.pathname.endsWith("criteria.html") && localStorage.getItem('role') === 'Admin') {
         loadCriteria()
     }
+
+    if(window.location.pathname.endsWith("candidates.html") && localStorage.getItem('role') === 'Admin') {
+        loadCandidatesAsAdmin() 
+    }
+
+    
 
 
     // GATEKEEPERS

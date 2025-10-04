@@ -6,42 +6,54 @@
     <title>Manage Candidates</title>
 </head>
 <body>
-    <form id="register-candidate-form">
+    <form id="candidate-form">
+        <h2 id="form-title">Add New Candidate</h2>
+        <input type="hidden" id="candidate-id" name="id">
+
         <div>
-            <label class="small-lbl">Portion ID</label>
-            <input type="text" id="portion_id" name="portion_id" placeholder="Type your portion id" required>
+            <label>Full Name</label>
+            <input type="text" id="full_name" name="full_name" placeholder="Enter full name" required>
         </div>
         <div>
-            <label class="small-lbl">Full Name</label>
-            <input type="text" id="fullname-candidate" name="full_name" placeholder="Type your full name" required>
+            <label>Course</label>
+            <input type="text" id="course" name="course" placeholder="Enter course" required>
         </div>
         <div>
-            <label class="small-lbl">Course</label>
-            <input type="text" id="course" name="course" placeholder="Type the course" required>
+            <label>Section</label>
+            <input type="text" id="section" name="section" placeholder="Enter section" required>
         </div>
         <div>
-            <label class="small-lbl">Section</label>
-            <input type="text" id="section" name="section" placeholder="Type your section" required>
+            <label>School</label>
+            <input type="text" id="school" name="school" placeholder="Enter school" required>
         </div>
         <div>
-            <label class="small-lbl">School</label>
-            <input type="text" id="school" name="school" placeholder="Type your school" required>
+            <label>Category</label>
+            <input type="text" id="category" name="category" placeholder="Enter category" required>
         </div>
         <div>
-            <label class="small-lbl">Category</label>
-            <input type="text" id="category" name="category" placeholder="Type your category" required>
+            <label>Assign to Portions</label>
+            <div id="portions-checkboxes">
+                <p>Loading portions...</p>
+            </div>
         </div>
         <div>
-            <label class="small-lbl">Image</label>
-            <input type="file" id="image" name="image" required>
+            <label>Image</label>
+            <input type="file" id="image" name="image">
+            <small>Leave blank if you don't want to change the existing image when editing.</small>
         </div>
         <div>
-            <button type="submit">Submit</button>
+            <button type="submit" id="submit-btn">Add Candidate</button>
+            <button type="button" id="cancel-btn" style="display: none;">Cancel Edit</button>
         </div>
     </form>
 
 
-    <div><!-- Lalagyan ng candidates tabular --></div>
+    <div id="candidates-list-container">
+        <h2>Existing Candidates</h2>
+        <div id="candidates-table">
+            <p>Loading candidates...</p>
+        </div>
+    </div>
 
     <script src="script.js" type="module"></script>
 </body>

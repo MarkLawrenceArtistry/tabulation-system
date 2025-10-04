@@ -16,21 +16,36 @@ export async function fetchCandidates() {
     return result.data
 }
 export async function addCandidate(formData) {
-    
     const response = await fetch(`api/candidates/`, {
         method: 'POST',
         body: formData
-    })
-    if(!response.ok) {
-        throw new Error('Error adding candidates.')
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.data || 'Error adding candidate.');
     }
-
-    const result = await response.json()
-    if(!result.success) {
-        throw new Error(result.data)
+    return await response.json();
+}
+export async function updateCandidate(id, formData) {
+    const response = await fetch(`api/candidates/${id}`, {
+        method: 'PUT',
+        body: formData
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.data || 'Error updating candidate.');
     }
-
-    return result.data
+    return await response.json();
+}
+export async function deleteCandidate(id) {
+    const response = await fetch(`api/candidates/${id}`, {
+        method: 'DELETE'
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.data || 'Error deleting candidate.');
+    }
+    return await response.json();
 }
 
 
@@ -221,6 +236,25 @@ export async function addCriteria(data) {
     })
     if(!response.ok) {
         throw new Error('Error adding criteria.')
+    }
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
+}
+export async function deleteCriteria(criteriaID) {
+    const response = await fetch(`api/criteria/${criteriaID}`, {
+        method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    if(!response.ok) {
+        throw new Error('Error deleting criteria')
     }
 
     const result = await response.json()
