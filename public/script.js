@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const portionsForm = document.querySelector("#add-portion-form")
     const portionBtnContainer = document.querySelector('#portions')
 
+    // CRITERIA DECLARATIONS
+    const criteriaContainer = document.querySelector('#criteria-container')
+
     // OTHER DECLARATIONS
     let currentCandidates = []
 
@@ -30,31 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
     // INITIALIZERS
-    async function loadCandidates(portionIdFilter) {
-        try {
-            const candidates = await api.fetchCandidates()
-            currentCandidates = candidates
-            ui.renderCandidates(currentCandidates, candidatesContainer, portionIdFilter)
-        } catch(err) {
-            console.error(err)
-        }
-    }
-    async function loadJudgeScores() {
-        try {
-            const scores = await api.fetchScores()
-            ui.renderScores(scores, judgeScoresContainer)
-        } catch(err) {
-            console.error(err)
-        }
-    }
-    async function loadPortions() {
-        try {
-            const portions = await api.fetchPortions()
-            ui.renderPortions(portions, portionsContainer)
-        } catch(err) {
-            console.error(err)
-        }
-    }
     async function initializeJudgeDashboard() {
         if (!judgePortionsContainer) return;
 
@@ -91,6 +69,31 @@ document.addEventListener('DOMContentLoaded', () => {
             judgePortionsContainer.innerHTML = '<p>Could not load event portions.</p>';
         }
     }
+    async function loadJudgeScores() {
+        try {
+            const scores = await api.fetchScores()
+            ui.renderScores(scores, judgeScoresContainer)
+        } catch(err) {
+            console.error(err)
+        }
+    }
+    async function loadPortions() {
+        try {
+            const portions = await api.fetchPortions()
+            ui.renderPortions(portions, portionsContainer)
+        } catch(err) {
+            console.error(err)
+        }
+    }
+    async function loadCriteria() {
+        try {
+            const criteria = await api.fetchCriteria()
+            ui.renderCriteria(criteria, criteriaContainer)
+        } catch(err) {
+            console.error(err)
+        }
+    }
+
 
 
 
@@ -171,6 +174,12 @@ document.addEventListener('DOMContentLoaded', () => {
             candidatesHeader.style.display = 'block'
         })
     }
+
+
+
+
+    // CRITERIA
+
 
 
 

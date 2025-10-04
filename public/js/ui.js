@@ -1,41 +1,6 @@
 
 
 // CANDIDATES
-export const renderCandidates = (candidates, divContainer, portionIdFilter) => {
-    divContainer.innerHTML = ``
-
-    if(candidates.length === 0) {
-        divContainer.innerHTML = `<p style="text-align:center;">No candidates found.</p>`
-        return
-    }
-
-    console.log(candidates)
-    console.log(portionIdFilter)
-
-    candidates.forEach(candidate => {
-        if(candidate.portion_id === portionIdFilter) {
-            const candidateBox = document.createElement('div')
-            candidateBox.className = 'candidate-box box'
-            candidateBox.dataset.id = candidate.id
-
-            candidateBox.innerHTML = `
-                <img src="/api/candidates/${candidate.id}/image">
-                <h1>${candidate.full_name}</h1>
-                <p>${candidate.course}</p>
-                <p>${candidate.section}</p>
-                <p>${candidate.school}</p>
-                <p>${candidate.category}</p>
-
-                <div>
-                    <input type="text" class="score-input" placeholder="Enter your rating">
-                </div>
-            `
-
-            divContainer.appendChild(candidateBox)
-        }
-        
-    });
-}
 export const renderCandidatesForJudging = (candidates, divContainer) => {
     divContainer.innerHTML = '';
 
@@ -64,6 +29,7 @@ export const renderCandidatesForJudging = (candidates, divContainer) => {
 
 
 
+
 // SCORES
 export const renderScores = (scores, divContainer) => {
     divContainer.innerHTML = ``
@@ -74,7 +40,7 @@ export const renderScores = (scores, divContainer) => {
     }
 
     const table = document.createElement('table')
-    table.className = 'table status'
+    table.className = 'table scores'
     table.innerHTML = `
         <thead>
             <tr>
@@ -115,6 +81,7 @@ export const renderScores = (scores, divContainer) => {
 
 
 
+
 // PORTIONS
 export const renderPortions = (portions, divContainer) => {
     divContainer.innerHTML = ``
@@ -125,7 +92,7 @@ export const renderPortions = (portions, divContainer) => {
     }
 
     const table = document.createElement('table')
-    table.className = 'table status'
+    table.className = 'table portions'
     table.innerHTML = `
         <thead>
             <tr>
@@ -163,6 +130,58 @@ export const renderPortions = (portions, divContainer) => {
             <td>${portion.status}</td>
             <td>
                 ${isPortionOpen}
+            </td>
+        `
+
+        tbody.appendChild(row)
+    });
+    
+    divContainer.appendChild(table)
+}
+
+
+
+
+// CRITERIA
+export const renderCriteria = (criteria, divContainer) => {
+    divContainer.innerHTML = ``
+
+    if(criteria.length === 0) {
+        divContainer.innerHTML = `<p style="text-align:center;">No criteria found.</p>`
+        return 
+    }
+
+    const table = document.createElement('table')
+    table.className = 'table criteria'
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Portion ID</th>
+                <th>Name</th>
+                <th>Max Score</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `
+    const tbody = table.querySelector('tbody')
+
+    criteria.forEach(criterion => {
+        const row = document.createElement('tr')
+        row.className = 'criterion-item'
+        row.dataset.id = criterion.id
+
+        row.innerHTML = `
+            <td>${criterion.id}</td>
+            <td>${criterion.portion_id}</td>
+            <td>${criterion.name}</td>
+            <td>${criterion.max_score}</td>
+            <td>
+                <div class="action-buttons">
+                    <button class="btn edit-btn">Edit</button>
+                    <button class="btn delete-btn">Delete</button>
+                </div>
             </td>
         `
 
