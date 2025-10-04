@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const criteriaSelect = document.querySelector('#criteria-select')
     const judgeScoresContainer = document.querySelector('#judge-scores-container')
 
-    // PORTIONS
+    // PORTIONS DECLARATIONS
     const judgePortionsContainer = document.querySelector('#portions-container');
     const portionsForm = document.querySelector("#add-portion-form")
     const portionsContainer = document.querySelector('#portions-container')
@@ -30,6 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const criteriaContainer = document.querySelector('#criteria-container')
     const addCriteriaForm = document.querySelector('#add-criteria-form')
 
+    // RESULTS DECLARATIONS
+    const portionSelect = document.querySelector('#portion-select');
+    const resultsContainer = document.querySelector('#results-container');
+
     // OTHER DECLARATIONS
     let allCandidates = [];
 
@@ -37,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
     // INITIALIZERS
-    async function initializeJudgeDashboard() {
+    async function loadJudgeDashboard() {
         if (!judgePortionsContainer) return;
 
         const judgeId = localStorage.getItem('judge_id');
@@ -113,6 +117,20 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error('Failed to load page data:', err);
             candidatesTableContainer.innerHTML = `<p>Error loading data: ${err.message}</p>`;
+        }
+    }
+    async function loadTabulationPage() {
+        try {
+            const portions = await api.fetchPortions();
+            portions.forEach(portion => {
+                const option = document.createElement('option');
+                option.value = portion.id;
+                option.textContent = portion.name;
+                portionSelect.appendChild(option);
+            });
+        } catch (err) {
+            portionSelect.innerHTML = `<option>Could not load portions</option>`;
+            console.error(err);
         }
     }
 
@@ -323,7 +341,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     };
-    cancelBtn.addEventListener('click', resetForm);
+    if(cancelBtn) {
+        cancelBtn.addEventListener('click', resetForm);
+    }
 
 
 
@@ -374,6 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await api.submitScores(scoresPayload)
 
                 alert('Succesfully submitted!')
+                window.location.href = 'judges-dashboard.html'
                 console.log(result)
             } catch (err) {
                 alert('Error: Check your console.')
@@ -459,7 +480,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(result.success) {
                     alert('Succesfully registered!')
                     registerForm.reset()
-                    return
                 } else {
                     alert(result.data)
                     registerForm.reset()
@@ -475,13 +495,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    // RESULT
+    if(portionSelect) {
+        portionSelect.addEventListener('change', async (e) => {
+            const portionId = e.target.value;
+            if (!portionId) {
+                resultsContainer.innerHTML = '<p>Please select a portion to see the results.</p>';
+                return;
+            }
+
+            resultsContainer.innerHTML = '<p>Calculating results...</p>';
+
+            try {
+                const results = await api.fetchResults(portionId);
+                ui.renderResultsTable(results, resultsContainer);
+            } catch (err) {
+                resultsContainer.innerHTML = `<p style="color: red;">Error: ${err.message}</p>`;
+                console.error(err);
+            }
+        });
+    }
+
+
+
+
     // CALLERS
-    if(window.location.pathname.endsWith("judges-dashboard.html")) {
-        initializeJudgeDashboard();
+    if(window.location.pathname.endsWith("judges-dashboard.html") && localStorage.getItem('role') === 'Judge') {
+        loadJudgeDashboard();
+    } else if(window.location.pathname.endsWith("judges-dashboard.html") && localStorage.getItem('role') !== 'Judge') {
+        alert('You must be logged in as Judge to view this page. Redirecting..')
+        window.location.href = 'index.html'
     }
 
     if(window.location.pathname.endsWith("admin-dashboard.html") && localStorage.getItem('role') === 'Admin') {
         loadJudgeScores()
+    }
+    
+    if(window.location.pathname.endsWith("tabulation.html") && localStorage.getItem('role') === 'Admin') {
+        loadTabulationPage()
     }
 
     if(window.location.pathname.endsWith("portions.html") && localStorage.getItem('role') === 'Admin') {
@@ -494,6 +545,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if(window.location.pathname.endsWith("candidates.html") && localStorage.getItem('role') === 'Admin') {
         loadCandidatesAsAdmin() 
+    } else if(window.location.pathname.endsWith("candidates.html") && localStorage.getItem('role') === 'Judge') {
+        alert('You must be logged in as Admin to view this page. Redirecting..')
+        window.location.href = 'index.html'
     }
 
     

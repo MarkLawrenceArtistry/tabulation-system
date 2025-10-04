@@ -255,3 +255,45 @@ export const renderCriteria = (criteria, divContainer) => {
     
     divContainer.appendChild(table)
 }
+
+
+
+
+// RESULTS
+export const renderResultsTable = (results, container) => {
+    container.innerHTML = '';
+
+    if (results.length === 0) {
+        container.innerHTML = '<p>No scores have been submitted for this portion yet.</p>';
+        return;
+    }
+
+    const table = document.createElement('table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Candidate Name</th>
+                <th>Course & School</th>
+                <th>Judges Voted</th>
+                <th>Total Score</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
+    const tbody = table.querySelector('tbody');
+
+    results.forEach((result, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="rank">${index + 1}</td>
+            <td>${result.full_name}</td>
+            <td>${result.course} - ${result.school}</td>
+            <td style="text-align: center;">${result.judge_count}</td>
+            <td class="total-score">${result.total_score.toFixed(2)}</td>
+        `;
+        tbody.appendChild(row);
+    });
+    
+    container.appendChild(table);
+};

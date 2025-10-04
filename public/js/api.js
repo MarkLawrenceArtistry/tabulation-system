@@ -264,3 +264,19 @@ export async function deleteCriteria(criteriaID) {
 
     return result.data
 }
+
+
+
+
+// RESULTS
+export async function fetchResults(portionId) {
+    const response = await fetch(`api/results/${portionId}`);
+    if (!response.ok) {
+        throw new Error('Error fetching results.');
+    }
+    const result = await response.json();
+    if (!result.success) {
+        throw new Error(result.data);
+    }
+    return result.data;
+}
