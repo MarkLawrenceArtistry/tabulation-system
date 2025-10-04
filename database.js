@@ -65,6 +65,14 @@ const initDB = () => {
             );
         `
 
+        db.run('PRAGMA foreign_keys = ON;', (err) => {
+            if (err) {
+                console.error("ERROR: Failed to enable foreign key enforcement:", err.message);
+            } else {
+                console.log("FOREIGN KEY ENFORCEMENT is ON.");
+            }
+        });
+
         db.run(candidates, (err) => {
             if(err) {
                 console.log("ERROR CREATING candidates TABLE: " + err.message)
