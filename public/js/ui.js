@@ -23,7 +23,7 @@ export const renderCandidates = (candidates, divContainer) => {
             <p>${candidate.category}</p>
 
             <div>
-                <input type="text" class="criteria-input" placeholder="Enter your rating">
+                <input type="text" class="score-input" placeholder="Enter your rating">
             </div>
         `
 

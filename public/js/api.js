@@ -64,3 +64,26 @@ export async function registerUser(credentials) {
     const result = await response.json()
     return result
 }
+
+
+
+// SCORES, JUDGES
+export async function submitScores(scoresPayload) {
+    const response = await fetch(`api/scores/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(scoresPayload)
+    })
+    if(!response.ok) {
+        throw new Error('Error submitting candidates scores.')
+    }
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
+}

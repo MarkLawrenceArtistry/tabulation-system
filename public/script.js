@@ -7,10 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const candidatesContainer = document.querySelector('#candidates-container')
     const candidatesForm = document.querySelector('#register-candidate-form')
 
-
     // AUTH DECLARATIONS
     const loginForm = document.querySelector('#login-form')
     const registerForm = document.querySelector('#register-form')
+
+    // SCORES, JUDGES DECLARATION
+    const judgeScoresBtn = document.querySelector('#judge-scores-btn')
+    const criteriaSelect = document.querySelector('#criteria-select')
+
+
+
+
+
+
+
 
     
     // INITIALIZERS
@@ -42,6 +52,64 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch(err) {
                 console.error('Adding candidate failed:', err, result.data);
                 alert('Adding candidate failed: An error occurred during the process. Check your console.');
+            }
+        })
+    }
+
+
+
+
+    // SCORES, JUDGES
+    if(judgeScoresBtn) {
+        judgeScoresBtn.addEventListener('click', async (e) => {
+            e.preventDefault()
+
+            const judgeId = localStorage.getItem('judge_id');
+            const criteriaId = criteriaSelect.value;
+
+            if (!judgeId) {
+                alert('Error: Judge is not logged in.');
+                return;
+            }
+            if (!criteriaId) {
+                alert('Please select a criteria before submitting.');
+                return;
+            }
+
+            const scoreInputs = document.querySelectorAll('.score-input');
+            const scoresPayload = [];
+
+            scoreInputs.forEach(input => {
+                const scoreValue = input.value;
+                
+                if (scoreValue) {
+                    const candidateBox = input.closest('.candidate-box');
+                    
+                console.log(candidateBox.dataset)
+                    const candidateId = candidateBox.dataset.id;
+
+                    scoresPayload.push({
+                        judge_id: parseInt(judgeId, 10),
+                        candidate_id: parseInt(candidateId, 10),
+                        criterion_id: parseInt(criteriaId, 10),
+                        score: parseInt(scoreValue, 10)
+                    });
+                }
+            });
+
+            if (scoresPayload.length === 0) {
+                alert('No scores were entered. Nothing to submit.');
+                return;
+            }
+
+            try {
+                const result = await api.submitScores(scoresPayload)
+
+                alert('Succesfully submitted!')
+                console.log(result)
+            } catch (err) {
+                alert('Error: Check your console.')
+                console.error(err)
             }
         })
     }

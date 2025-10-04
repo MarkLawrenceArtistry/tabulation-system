@@ -1,26 +1,35 @@
 const { db } = require('../database')
 
 // for POST 
-const createScore = (req, res) => {
-    const { judge_id, candidate_id, criterion_id, score } = req.body
+const submitScores = (req, res) => {
+    const scores = req.body
+    console.log(scores)
+
+    if(scores.length === 0) {
+        return res.status(404).json({success:false,data:"Empty scores data provided"})
+    }
 
     const query = `
-        INSERT INTO scores (judge_id, candidate_id, criterion_id, score)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO scores (judge_id, candidate_id, criterion_id, score) VALUES
     `
-    const params = [judge_id, candidate_id, criterion_id, score]
 
-    db.run(query, params, function(err) {
+    const valuePlaceholders = []
+    const params = []
+
+    scores.forEach(score => {
+        valuePlaceholders.push('(?, ?, ?, ?)')
+        params.push(score.judge_id, score.candidate_id, score.criterion_id, score.score)
+    });
+    const finalQuery = query + valuePlaceholders.join(', ')
+    db.run(finalQuery, params, function(err) {
         if(err) {
+            if (err.message.includes('UNIQUE constraint failed')) {
+                return res.status(409).json({ success: false, data: 'One or more of these scores have already been submitted.' });
+            }
+
             res.status(500).json({success:false,data:err.message})
         } else {
-            res.status(201).json({success:true,data:{
-                id: this.lastID,
-                judge_id: judge_id,
-                candidate_id: candidate_id,
-                criterion_id: criterion_id,
-                score: score
-            }})
+            res.status(201).json({success:true,data:'Submission successful.'})
         }
     })
 }
@@ -113,4 +122,4 @@ const deleteScore = (req, res) => {
     })
 }
 
-module.exports = { createScore, getAllScores, getScore, updateScore, deleteScore }
+module.exports = { submitScores, getAllScores, getScore, updateScore, deleteScore }
