@@ -10,7 +10,7 @@ const db = new sqlite3.Database(DB_SOURCE, (err) => {
 const initDB = () => {
     db.serialize(() => {
         const events = `
-            CREATE TABLE events (
+            CREATE TABLE IF NOT EXISTS events (
                 id INTEGER PRIMARY KEY,
                 name TEXT NOT NULL,
                 date TEXT
@@ -32,17 +32,17 @@ const initDB = () => {
         `
 
         const users = `
-            CREATE TABLE users (
+            CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY,
                 username TEXT NOT NULL UNIQUE,
-                password TEXT NOT NULL,
+                password_hash TEXT NOT NULL,
                 full_name TEXT NOT NULL,
-                role TEXT NOT NULL -- 'admin' or 'judge'
+                role TEXT NOT NULL
             );
         `
 
         const portions = `
-            CREATE TABLE portions (
+            CREATE TABLE IF NOT EXISTS portions (
                 id INTEGER PRIMARY KEY,
                 event_id INTEGER NOT NULL,
                 name TEXT NOT NULL,
@@ -52,7 +52,7 @@ const initDB = () => {
         `
 
         const criteria = `
-            CREATE TABLE criteria (
+            CREATE TABLE IF NOT EXISTS criteria (
                 id INTEGER PRIMARY KEY,
                 portion_id INTEGER NOT NULL,
                 name TEXT NOT NULL,
@@ -62,7 +62,7 @@ const initDB = () => {
         `
 
         const scores = `
-            CREATE TABLE scores (
+            CREATE TABLE IF NOT EXISTS scores (
                 id INTEGER PRIMARY KEY,
                 judge_id INTEGER NOT NULL,
                 candidate_id INTEGER NOT NULL,
