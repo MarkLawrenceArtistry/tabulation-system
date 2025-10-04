@@ -41,6 +41,28 @@ const getAllPortions = (req, res) => {
     })
 }
 
+// for GET (single data)
+const getPortion = (req, res) => {
+    const { id } = req.params
+    const query = `
+        SELECT * FROM portions WHERE id = ?
+    `
+    const params = [id]
+
+    db.get(query, params, (err, row) => {
+        if(err) {
+            return res.status(500).json({success:false,data:err.message})
+        }
+        
+        if(!row) {
+            return res.status(404).json({success:false,data:"Portion not found."})
+        } else {
+            res.status(200).json({success:true,data:row})
+        }
+        
+    })
+}
+
 // for UPDATE
 const updatePortion = (req, res) => {
     const { id } = req.params
@@ -87,4 +109,4 @@ const deletePortion = (req, res) => {
     })
 }
 
-module.exports = { createPortion, getAllPortions, updatePortion, deletePortion }
+module.exports = { createPortion, getAllPortions, getPortion, updatePortion, deletePortion }
