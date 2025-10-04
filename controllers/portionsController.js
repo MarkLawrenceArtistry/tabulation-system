@@ -5,7 +5,7 @@ const createPortion = (req, res) => {
     const { name, status } = req.body
 
     const query = `
-        INSERT INTO candidates (name, status)
+        INSERT INTO portions (name, status)
         VALUES (?, ?)
     `
     const params = [name, status]

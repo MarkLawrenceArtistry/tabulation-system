@@ -2,7 +2,7 @@ const { db } = require('../database')
 
 // for POST 
 const createCandidate = (req, res) => {
-    const { full_name, course, section, school, category } = req.body
+    const { portion_id, full_name, course, section, school, category } = req.body
 
     if(!req.file) {
         return res.status(400).json({success:false,data:"No image file uploaded."})
