@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // PORTIONS
     const portionsContainer = document.querySelector('#portions-container')
+    const portionsForm = document.querySelector("#add-portion-form")
 
 
 
@@ -55,7 +56,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // PORTIONS
+    if(portionsForm) {
+        portionsForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
 
+            const data = {
+                name: document.querySelector('#portion-name').value,
+                status: document.querySelector('#portion-status').value
+            }
+
+            console.log(data)
+
+            try {
+                await api.addPortion(data)
+                alert('Added portion successfully')
+            } catch(err) {
+                console.error(err)
+            }
+
+            loadPortions()
+        })
+    }
 
 
 

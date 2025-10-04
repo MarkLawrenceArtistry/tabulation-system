@@ -136,3 +136,20 @@ export async function fetchPortions() {
 
     return result.data
 }
+export async function addPortion(data) {
+    const response = await fetch(`api/portions/`, {
+        method: 'POST',
+        headers: { "Content-Type": 'application/json' },
+        body: JSON.stringify(data)
+    })
+    if(!response.ok) {
+        throw new Error('Error adding portion.')
+    }
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
+}

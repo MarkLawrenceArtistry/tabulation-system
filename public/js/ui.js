@@ -113,14 +113,18 @@ export const renderPortions = (portions, divContainer) => {
         row.className = 'portion-item'
         row.dataset.id = portion.id
 
-        let isPortionOpen = ''
+        let isPortionOpen = ``
         if(portion.status !== 'open') {
             isPortionOpen = `
                 <div class="action-buttons">
                     <button class="btn open-btn">Start Portion</button>
-                </div>
             `
         }
+        isPortionOpen += `
+                <button class="btn edit-btn">Edit</button>
+                <button class="btn delete-btn">Delete</button>
+            </div>
+        `
 
         row.innerHTML = `
             <td>${portion.id}</td>
