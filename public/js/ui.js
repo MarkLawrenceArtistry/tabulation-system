@@ -1,7 +1,7 @@
 
 
 // CANDIDATES
-export const renderCandidates = (candidates, divContainer) => {
+export const renderCandidates = (candidates, divContainer, portionIdFilter) => {
     divContainer.innerHTML = ``
 
     if(candidates.length === 0) {
@@ -9,25 +9,31 @@ export const renderCandidates = (candidates, divContainer) => {
         return
     }
 
+    console.log(candidates)
+    console.log(portionIdFilter)
+
     candidates.forEach(candidate => {
-        const candidateBox = document.createElement('div')
-        candidateBox.className = 'candidate-box box'
-        candidateBox.dataset.id = candidate.id
+        if(candidate.portion_id === portionIdFilter) {
+            const candidateBox = document.createElement('div')
+            candidateBox.className = 'candidate-box box'
+            candidateBox.dataset.id = candidate.id
 
-        candidateBox.innerHTML = `
-            <img src="/api/candidates/${candidate.id}/image">
-            <h1>${candidate.full_name}</h1>
-            <p>${candidate.course}</p>
-            <p>${candidate.section}</p>
-            <p>${candidate.school}</p>
-            <p>${candidate.category}</p>
+            candidateBox.innerHTML = `
+                <img src="/api/candidates/${candidate.id}/image">
+                <h1>${candidate.full_name}</h1>
+                <p>${candidate.course}</p>
+                <p>${candidate.section}</p>
+                <p>${candidate.school}</p>
+                <p>${candidate.category}</p>
 
-            <div>
-                <input type="text" class="score-input" placeholder="Enter your rating">
-            </div>
-        `
+                <div>
+                    <input type="text" class="score-input" placeholder="Enter your rating">
+                </div>
+            `
 
-        divContainer.appendChild(candidateBox)
+            divContainer.appendChild(candidateBox)
+        }
+        
     });
 }
 

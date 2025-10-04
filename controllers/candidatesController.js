@@ -36,7 +36,7 @@ const createCandidate = (req, res) => {
 // for GET
 const getAllCandidates = (re, res) => {
     const query = `
-        SELECT id, full_name, course, section, school, category
+        SELECT id, portion_id, full_name, course, section, school, category
         FROM candidates
     `
 

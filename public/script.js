@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // CANDIDATES DECLARATIONS
     const candidatesContainer = document.querySelector('#candidates-container')
     const candidatesForm = document.querySelector('#register-candidate-form')
+    const candidatesHeader = document.querySelector('#candidates-header')
 
     // AUTH DECLARATIONS
     const loginForm = document.querySelector('#login-form')
@@ -19,18 +20,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // PORTIONS
     const portionsContainer = document.querySelector('#portions-container')
     const portionsForm = document.querySelector("#add-portion-form")
+    const portionBtnContainer = document.querySelector('#portions')
 
-
+    // OTHER DECLARATIONS
+    let currentCandidates = []
 
 
 
 
     
     // INITIALIZERS
-    async function loadCandidates() {
+    async function loadCandidates(portionIdFilter) {
         try {
             const candidates = await api.fetchCandidates()
-            ui.renderCandidates(candidates, candidatesContainer)
+            currentCandidates = candidates
+            ui.renderCandidates(currentCandidates, candidatesContainer, portionIdFilter)
         } catch(err) {
             console.error(err)
         }
@@ -100,6 +104,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     }
+    if(portionBtnContainer) {
+        portionBtnContainer.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            let portionBtn = document.querySelectorAll('.portions-btn')
+        
+            if(portionBtn.textContent === 'Sportswear') {
+                localStorage.remove('portion')
+                localStorage.setItem('portion', JSON.stringify(1));
+            } else if (portionBtn.textContent === 'Swimwear') {
+                localStorage.remove('portion')
+                localStorage.setItem('portion', JSON.stringify(2));
+            }
+
+            candidatesContainer.style.display = 'flex'
+            candidatesHeader.style.display = 'block'
+        })
+    }
 
 
 
@@ -153,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (scoreValue) {
                     const candidateBox = input.closest('.candidate-box');
                     
-                console.log(candidateBox.dataset)
                     const candidateId = candidateBox.dataset.id;
 
                     scoresPayload.push({
@@ -272,8 +293,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // CALLERS
-    if(window.location.pathname.endsWith("judges-dashboard.html")) {
-        loadCandidates()
+    let portionIdFilter = JSON.parse(localStorage.getItem('portion'))
+    let judgesDashboard = window.location.pathname.endsWith("judges-dashboard.html") 
+    // for sportswear
+    if(judgesDashboard && portionIdFilter === 1) {
+        loadCandidates(portionIdFilter)
+    } else if (judgesDashboard && portionIdFilter === 2) {
+        loadCandidates(portionIdFilter)
     }
 
     if(window.location.pathname.endsWith("admin-dashboard.html") && localStorage.getItem('role') === 'Admin') {
