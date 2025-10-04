@@ -6,25 +6,37 @@
     <title>Manage Candidates</title>
 </head>
 <body>
-    <form id="register-form">
+    <form id="register-candidate-form">
+        <div>
+            <label class="small-lbl">Portion ID</label>
+            <input type="text" id="portion_id" name="portion_id" placeholder="Type your portion id" required>
+        </div>
         <div>
             <label class="small-lbl">Full Name</label>
-            <input type="text" id="fullname" placeholder="Type your full name">
+            <input type="text" id="fullname-candidate" name="full_name" placeholder="Type your full name" required>
         </div>
         <div>
-            <label class="small-lbl">Role</label>
-            <input type="text" id="role" placeholder="Type the role">
+            <label class="small-lbl">Course</label>
+            <input type="text" id="course" name="course" placeholder="Type the course" required>
         </div>
         <div>
-            <label class="small-lbl">Username</label>
-            <input type="text" id="username-register" placeholder="Type your username">
+            <label class="small-lbl">Section</label>
+            <input type="text" id="section" name="section" placeholder="Type your section" required>
         </div>
         <div>
-            <label class="small-lbl">Password</label>
-            <input type="password" id="password-register" placeholder="Type your password">
+            <label class="small-lbl">School</label>
+            <input type="text" id="school" name="school" placeholder="Type your school" required>
         </div>
         <div>
-            <button type="submit">Log In</button>
+            <label class="small-lbl">Category</label>
+            <input type="text" id="category" name="category" placeholder="Type your category" required>
+        </div>
+        <div>
+            <label class="small-lbl">Image</label>
+            <input type="file" id="image" name="image" required>
+        </div>
+        <div>
+            <button type="submit">Submit</button>
         </div>
     </form>
 

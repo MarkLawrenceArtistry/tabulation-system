@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // CANDIDATES DECLARATIONS
     const candidatesContainer = document.querySelector('#candidates-container')
+    const candidatesForm = document.querySelector('#register-candidate-form')
 
 
     // AUTH DECLARATIONS
@@ -20,6 +21,29 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch(err) {
             console.error(err)
         }
+    }
+
+
+
+
+    // CANDIDATES
+    if(candidatesForm) {
+        candidatesForm.addEventListener('submit', async (e) => {
+            e.preventDefault()
+
+            const formData = new FormData(candidatesForm)
+
+            try {
+                const result = await api.addCandidate(formData)
+                console.log(result)
+
+                alert('Succesfully registered!')
+                candidatesForm.reset()
+            } catch(err) {
+                console.error('Adding candidate failed:', err, result.data);
+                alert('Adding candidate failed: An error occurred during the process. Check your console.');
+            }
+        })
     }
 
 

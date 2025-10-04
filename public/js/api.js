@@ -15,6 +15,23 @@ export async function fetchCandidates() {
 
     return result.data
 }
+export async function addCandidate(formData) {
+    
+    const response = await fetch(`api/candidates/`, {
+        method: 'POST',
+        body: formData
+    })
+    if(!response.ok) {
+        throw new Error('Error adding candidates.')
+    }
+
+    const result = await response.json()
+    if(!result.success) {
+        throw new Error(result.data)
+    }
+
+    return result.data
+}
 
 
 
