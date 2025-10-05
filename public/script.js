@@ -37,7 +37,44 @@ document.addEventListener('DOMContentLoaded', () => {
     // OTHER DECLARATIONS
     let allCandidates = [];
 
+    // FILTERING DECLARATIONS
+    const judgeFilter = document.querySelector('#judge-filter');
+    const candidateFilter = document.querySelector('#candidate-filter');
+    const portionFilter = document.querySelector('#portion-filter');
+    const searchInput = document.querySelector('#search-input');
+    let allScores = []; 
 
+    // --- Modal Declarations ---
+    const modal = document.querySelector('#custom-modal');
+    const modalMessage = document.querySelector('#modal-message');
+    const modalCloseBtn = document.querySelector('.modal-close-btn');
+
+    // --- Modal Functions ---  
+    /**
+    * Displays the custom modal with a specific message.
+ * @param {string} message The message to show in the modal.
+ */
+    function showModal(message) {
+        if (!modal || !modalMessage) return;
+        modalMessage.textContent = message;
+        modal.classList.remove('modal-hidden');
+    }
+
+
+    function hideModal() {
+            if (!modal) return;
+                modal.classList.add('modal-hidden');
+    }
+
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', hideModal);
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+        // Close modal only if the overlay (the parent) is clicked
+            if (e.target === modal) {
+                hideModal();
+            }
+        });
+    }
 
     
     // INITIALIZERS
@@ -77,14 +114,20 @@ document.addEventListener('DOMContentLoaded', () => {
             judgePortionsContainer.innerHTML = '<p>Could not load event portions.</p>';
         }
     }
-    async function loadJudgeScores() {
+
+    // new update for filtering
+        async function loadJudgeScores() {
         try {
-            const scores = await api.fetchScores()
-            ui.renderScores(scores, judgeScoresContainer)
+            const scores = await api.fetchScores();
+            allScores = scores; 
+            ui.renderScores(scores, judgeScoresContainer);
+            populateFilters(scores);
+
         } catch(err) {
-            console.error(err)
+            console.error(err);
         }
     }
+
     async function loadPortions() {
         try {
             const portions = await api.fetchPortions()
@@ -431,38 +474,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // AUTH
     if(loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault()
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault()
 
-            const credentials = {
-                username: document.querySelector('#username').value,
-                password: document.querySelector('#password').value
-            }
+        const credentials = {
+            username: document.querySelector('#username').value,
+            password: document.querySelector('#password').value
+        }
 
-            try {
-                const result = await api.loginUser(credentials)
+        try {
+            const result = await api.loginUser(credentials)
 
-                if(result.success) {
-                    localStorage.setItem('isLoggedIn', true)
-                    localStorage.setItem('role', result.data.role)
-                    localStorage.setItem('judge_id', result.data.id)
-                    alert('Welcome back!')
+            if(result.success) {
+                localStorage.setItem('isLoggedIn', true)
+                localStorage.setItem('role', result.data.role)
+                localStorage.setItem('judge_id', result.data.id)
+                
+                // REPLACED ALERT WITH MODAL
+                showModal('Welcome back!');
+
+               
+                setTimeout(() => {
                     if(result.data.role === 'Judge') {
                         window.location.href = 'judges-dashboard.html'
                     } else if(result.data.role === 'Admin') {
                         window.location.href = 'admin-dashboard.html'
                     }
-                } else {
-                    alert(result.data || 'Wrong credentials')
-                    loginForm.reset()
-                }
-            } catch (err) {
-                alert('Wrong credentials')
-                loginForm.reset()
-                console.error(err)
+                }, 1500);
+
+            } else {
+                // REPLACED ALERT WITH MODAL
+                showModal(result.data || 'Wrong credentials');
+                loginForm.reset();
             }
-        })
-    }
+        } catch (err) {
+            // REPLACED ALERT WITH MODAL
+            showModal('Wrong credentials');
+            loginForm.reset();
+            console.error(err);
+        }
+    });
+}
     if(registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault()
@@ -516,7 +568,64 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // New Populate Filters and Apply Filters Functions
 
+    function populateFilters(scores) {
+    const judges = [...new Set(scores.map(score => score.judge_name))];
+    const candidates = [...new Set(scores.map(score => score.candidate_name))];
+    const portions = [...new Set(scores.map(score => score.portion_name))];
+
+    judges.forEach(judge => {
+        const option = document.createElement('option');
+        option.value = judge;
+        option.textContent = judge;
+        judgeFilter.appendChild(option);
+    });
+
+    candidates.forEach(candidate => {
+        const option = document.createElement('option');
+        option.value = candidate;
+        option.textContent = candidate;
+        candidateFilter.appendChild(option);
+    });
+
+    portions.forEach(portion => {
+        const option = document.createElement('option');
+        option.value = portion;
+        option.textContent = portion;
+        portionFilter.appendChild(option);
+    });
+}
+
+function applyFilters() {
+    let filteredScores = allScores;
+
+    const judge = judgeFilter.value;
+    const candidate = candidateFilter.value;
+    const portion = portionFilter.value;
+    const searchTerm = searchInput.value.toLowerCase();
+
+    if (judge) {
+        filteredScores = filteredScores.filter(score => score.judge_name === judge);
+    }
+    if (candidate) {
+        filteredScores = filteredScores.filter(score => score.candidate_name === candidate);
+    }
+    if (portion) {
+        filteredScores = filteredScores.filter(score => score.portion_name === portion);
+    }
+    if (searchTerm) {
+        filteredScores = filteredScores.filter(score => score.criterion_name.toLowerCase().includes(searchTerm));
+    }
+
+    ui.renderScores(filteredScores, judgeScoresContainer);
+}
+
+// Event Listeners for filters
+if (judgeFilter) judgeFilter.addEventListener('change', applyFilters);
+if (candidateFilter) candidateFilter.addEventListener('change', applyFilters);
+if (portionFilter) portionFilter.addEventListener('change', applyFilters);
+if (searchInput) searchInput.addEventListener('input', applyFilters);
 
 
     // CALLERS

@@ -3,27 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabulation System</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Judge Dashboard</title>
+    <link rel="stylesheet" href="judges-dashboard.css">
 </head>
 <body>
-    <h1>Foundation Day Event</h1>
-
-    <div id="portions-container">
-
+    <!--  Sidebar Portions -->
+    <div class="sidebar">
+        <h2>Portions</h2>
+        <div id="portions-container">
+           
+            <button class="portions-btn" data-portion-id="1">Casual Wear</button>
+            <button class="portions-btn" data-portion-id="2">Academic Uniform</button>
+            <button class="portions-btn" data-portion-id="3">Formal Attire</button>
+            <button class="portions-btn" data-portion-id="4">Question and Answer</button>
+          
+        </div>
     </div>
 
-    <div id="candidates-header" style="display: none;">
-        <h3 id="portion-title"></h3>
-        <select id="criteria-select">
-            <option value="">--Please choose a criterion--</option>
-        </select>
-    </div>
-    
-    <div id="candidates-container" style="display: none;"></div>
+    <!-- Main Content Area for Judging -->
+    <div class="main-content">
+        <h1>Foundation Day Event</h1>
 
-    <div id="submit-container" style="display: none;">
-        <button id="judge-scores-btn">Submit Scores</button>
+        <div id="candidates-header" style="display: none;">
+            <h3 id="portion-title"></h3>
+            <select id="criteria-select">
+                <option value="">--Please choose a criterion--</option>
+            </select>
+        </div>
+        
+        <div id="candidates-container" style="display: none;"></div>
+
+        <div id="submit-container" style="display: none;">
+            <button id="judge-scores-btn">Submit Scores</button>
+        </div>
     </div>
 
     <script src="script.js" type="module"></script>

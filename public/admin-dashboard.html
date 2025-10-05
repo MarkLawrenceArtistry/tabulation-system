@@ -2,16 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width='device-width', initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-dashboard.css">
 </head>
 <body>
-    <h1>Manage Judge Scores</h1>
-    <!-- Gawa nalang ng filtering dito frontend side -->
-    <div id="judge-scores-container">
+    <div class="container">
+        <h1>Manage Judge Scores</h1>
 
+        <!-- Filtering Section -->
+        <div class="filter-container">
+            <select id="judge-filter">
+                <option value="">Filter by Judge</option>
+            </select>
+            <select id="candidate-filter">
+                <option value="">Filter by Candidate</option>
+            </select>
+            <select id="portion-filter">
+                <option value="">Filter by Portion</option>
+            </select>
+            <input type="text" id="search-input" placeholder="Search by criteria...">
+        </div>
+
+        <!-- Scores Table will be displayed here -->
+        <div id="judge-scores-container">
+            <!-- The table will be dynamically inserted here by script.js -->
+        </div>
     </div>
+
     <script src="script.js" type="module"></script>
 </body>
 </html>

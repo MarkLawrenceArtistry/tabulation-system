@@ -81,16 +81,18 @@ export const renderCandidatesTable = (candidates, container, onEdit, onDelete) =
 
 
 // SCORES
-export const renderScores = (scores, divContainer) => {
-    divContainer.innerHTML = ``
 
-    if(scores.length === 0) {
-        divContainer.innerHTML = `<p style="text-align:center;">No scores found.</p>`
-        return 
+export function renderScores(scores, container) {
+    if (!scores || scores.length === 0) {
+        container.innerHTML = '<p style="text-align: center; padding: 20px;">No scores found.</p>';
+        return;
     }
 
-    const table = document.createElement('table')
-    table.className = 'table scores'
+    // Create the table structure
+    const table = document.createElement('table');
+    table.className = 'scores-table';
+    
+    // Create table header
     table.innerHTML = `
         <thead>
             <tr>
@@ -99,34 +101,34 @@ export const renderScores = (scores, divContainer) => {
                 <th>Candidate ID</th>
                 <th>Criterion ID</th>
                 <th>Score</th>
+                <th>Action</th>
             </tr>
         </thead>
-        <tbody></tbody>
-    `
-    const tbody = table.querySelector('tbody')
+    `;
 
+    // Create table body
+    const tbody = document.createElement('tbody');
     scores.forEach(score => {
-        const row = document.createElement('tr')
-        row.className = 'score-item'
-        row.dataset.id = score.id
-
+        const row = document.createElement('tr');
+        row.className = 'score-item';
+        row.dataset.id = score.id;
+        
         row.innerHTML = `
             <td>${score.id}</td>
             <td>${score.judge_id}</td>
             <td>${score.candidate_id}</td>
             <td>${score.criterion_id}</td>
             <td>${score.score}</td>
-            <td>
-                <div class="action-buttons">
-                    <button class="btn delete-btn">Delete</button>
-                </div>
-            </td>
-        `
-
-        tbody.appendChild(row)
+            <td><button class="delete-btn">Delete</button></td>
+        `;
+        tbody.appendChild(row);
     });
+
+    table.appendChild(tbody);
     
-    divContainer.appendChild(table)
+    // Clear the container and append the new table
+    container.innerHTML = '';
+    container.appendChild(table);
 }
 
 
@@ -203,9 +205,6 @@ export const renderPortionCheckboxes = (portions, container) => {
         container.appendChild(label);
     });
 };
-
-
-
 
 // CRITERIA
 export const renderCriteria = (criteria, divContainer) => {
