@@ -1,9 +1,9 @@
-/* General Body and Typography */
+/* Root Variables */
 :root {
     --primary-bg: #F7F9FC;
     --container-bg: #FFFFFF;
     --text-color: #3C4858;
-    --header-color: #E8B957; /* Gold Accent */
+    --header-color: #E8B957; 
     --border-color: #E0E6ED;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     --button-danger-bg: #dc3545;
@@ -64,7 +64,7 @@ h1 {
     background-color: var(--container-bg);
     border-radius: 8px;
     box-shadow: var(--shadow);
-    overflow: hidden; /* Ensures the border-radius is applied to the table corners */
+    overflow: hidden; 
 }
 
 .scores-table {
@@ -91,7 +91,7 @@ h1 {
 }
 
 .scores-table tbody tr:last-child td {
-    border-bottom: none; /* Removes border from the last row */
+    border-bottom: none; 
 }
 
 .delete-btn {
@@ -109,7 +109,6 @@ h1 {
     background-color: #c82333;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .filter-container {
         flex-direction: column;

@@ -1,11 +1,11 @@
-/* General Body and Typography */
+/* Root Variables */
 :root {
     --sidebar-bg: #1A1A1A;
     --main-bg: #F7F9FC;
     --container-bg: #FFFFFF;
     --text-color: #3C4858;
     --sidebar-text-color: #F5F5F5;
-    --primary-accent: #E8B957; /* Gold */
+    --primary-accent: #E8B957; 
     --border-color: #E0E6ED;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
@@ -15,10 +15,10 @@ body {
     margin: 0;
     display: flex;
     height: 100vh;
-    overflow: hidden; /* Prevents whole page from scrolling */
+    overflow: hidden; 
 }
 
-/* --- Sidebar Styling --- */
+/* --- Sidebar --- */
 .sidebar {
     width: 260px;
     background-color: var(--sidebar-bg);
@@ -71,11 +71,12 @@ body {
 }
 
 /* --- Main Content Styling --- */
+
 .main-content {
     flex-grow: 1;
     background-color: var(--main-bg);
     padding: 40px;
-    overflow-y: auto; /* Allows only the main content to scroll */
+    overflow-y: auto; 
 }
 
 .main-content h1 {

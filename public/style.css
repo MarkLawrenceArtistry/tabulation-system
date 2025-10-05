@@ -19,7 +19,7 @@ body {
     height: 100vh;
 }
 
-/* Right Panel: Content */
+/* Left Panel: Content */
 .content-panel {
     background-color: var(--black-color);
     width: 50%;
@@ -48,7 +48,7 @@ body {
     font-size: 1.2rem;
 }
 
-/* Left Panel: Login Form */
+/* Right Panel: Login Form */
 #login-form {
     background-color: var(--white-color);
     width: 50%;
@@ -113,7 +113,7 @@ button[type="submit"]:hover {
     background-color: #be8932;
 }
 
-/* --- New Modal Styles --- */
+/* --- Modal Styles --- */
 .modal-overlay {
     position: fixed;
     top: 0;
