@@ -27,7 +27,7 @@ app.use('/api/results', resultsRoutes)
 initDB()
 
 app.listen(PORT, () => {
-    console.log(`The port is listening at localhost:${PORT}...`)
+    console.log(`The port is listening at http://localhost:${PORT}...`)
 })
 
 app.get('/', (req, res) => {
