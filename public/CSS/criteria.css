@@ -1,0 +1,362 @@
+/* --- Root Variables --- */
+:root {
+    --primary-bg: #F7F9FC;
+    --sidebar-bg: #1A1A1A; /* Dark sidebar */
+    --container-bg: #FFFFFF;
+    --text-color: #3C4858;
+    --sidebar-text-color: #F5F5F5;
+    --header-color: #E8B957; /* Gold Accent */
+    --border-color: #E0E6ED;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --button-danger-bg: #dc3545;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* --- Main Dashboard Layout --- */
+.dashboard-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.main-content {
+    flex-grow: 1; /* Takes up remaining space */
+    overflow-y: auto; /* Allows only content to scroll */
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Sidebar Styling --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text-color);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    box-sizing: border-box;
+    flex-shrink: 0; /* Prevents sidebar from shrinking */
+}
+
+.sidebar-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    color: var(--header-color);
+}
+
+.sidebar-header span {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.sidebar-nav a {
+    display: block;
+    color: var(--sidebar-text-color);
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+    background-color: #2C2C2C;
+}
+
+/* Style for the active page link */
+.sidebar-nav a.active {
+    background-color: var(--header-color);
+    color: var(--sidebar-bg);
+    font-weight: bold;
+}
+
+#logout-btn {
+    margin-top: auto; /* Pushes logout to the bottom */
+}
+
+
+/* --- Criteria Page Specific Layout --- */
+
+
+/* --- Main Form Container Styling (The White Box) --- */
+.form-container {
+    background-color: var(--container-bg); /* #FFFFFF */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow); /* 0 4px 12px rgba(0, 0, 0, 0.05) */
+}
+
+/* --- Form Elements Styling --- */
+
+/* Styles the "Add New Criterion" title */
+.form-container h2 {
+    margin-top: 0;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+/* Styles the labels ("Criterion Name", etc.) */
+.form-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+/* Styles the text and number input fields */
+.form-container input[type="text"],
+.form-container input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Ensures padding doesn't affect the width */
+    margin-bottom: 20px; /* Adds space between form fields */
+}
+
+/* Styles the container for the submit button */
+.form-container .form-actions {
+    margin-top: 10px;
+}
+
+/* Styles the "Add Criterion" button */
+.form-container .form-actions button {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: var(--header-color); /* Gold color */
+    color: var(--sidebar-bg); /* Dark text */
+    transition: background-color 0.3s ease;
+}
+
+.form-container .form-actions button:hover {
+    background-color: #d4a74a; /* A slightly darker gold for hover effect */
+}
+
+/* Base style for both Edit and Delete buttons in the criteria table */
+.criteria-table-class .edit-btn,
+.criteria-table-class .delete-btn {
+    padding: 8px 16px;      /* Gives the buttons some breathing room */
+    border: none;             /* Removes the default browser border */
+    border-radius: 6px;       /* Adds modern rounded corners */
+    color: white;             /* Sets the text color to white */
+    font-size: 0.9rem;        /* Slightly smaller, cleaner font size */
+    font-weight: 500;       /* Makes the text bold but not too heavy */
+    cursor: pointer;          /* Shows a hand cursor on hover */
+    margin-right: 5px;        /* Adds space between the buttons */
+    transition: background-color 0.2s ease, transform 0.2s ease; /* Smooth transition for hover effects */
+}
+
+/* Specific style for the Edit button (Blue) */
+.criteria-table-class .edit-btn {
+    background-color: #007bff; /* A standard, professional blue */
+}
+
+/* Specific style for the Delete button (Red) */
+.criteria-table-class .delete-btn {
+    background-color: #dc3545; /* A standard, clear red for danger actions */
+}
+
+/* --- Hover Effects --- */
+
+/* Darkens the Edit button when you hover over it */
+.criteria-table-class .edit-btn:hover {
+    background-color: #0056b3; /* A darker shade of blue */
+    transform: translateY(-1px); /* Lifts the button slightly */
+}
+
+/* Darkens the Delete button when you hover over it */
+.criteria-table-class .delete-btn:hover {
+    background-color: #c82333; /* A darker shade of red */
+    transform: translateY(-1px);
+}
+
+
+
+/* This targets the white box for the criteria list */
+#criteria-list-container {
+    background-color: var(--container-bg);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    /* This makes the list span the full width if the grid stacks on mobile */
+    grid-column: span 2; 
+}
+
+/* On larger screens, the form and list are side-by-side */
+@media (min-width: 993px) {
+    #criteria-list-container {
+        grid-column: auto; /* Resets the span */
+    }
+}
+
+#criteria-list-container h2 {
+    margin-top: 0;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+/* --- Criteria Table Styling --- */
+/* This class will be added by ui.js */
+.criteria-table-class {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.criteria-table-class th,
+.criteria-table-class td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.criteria-table-class thead {
+    background-color: #F8F9FA;
+}
+
+.criteria-table-class th {
+    font-weight: 600;
+    color: #6C757D;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.criteria-table-class tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensures it's on top of all other content */
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* --- Class to hide the modal with a fade-out effect --- */
+.modal-overlay.modal-hidden {
+    opacity: 0;
+    pointer-events: none; /* Prevents clicks on the hidden overlay */
+}
+
+/* --- The main white content box --- */
+.modal-content {
+    background-color: #FFFFFF; /* Or use var(--container-bg) if defined */
+    color: #3C4858;       /* Or use var(--text-color) if defined */
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 450px;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+/* --- Shrink effect when modal is hiding --- */
+.modal-overlay.modal-hidden .modal-content {
+    transform: scale(0.9);
+}
+
+/* --- Header section with title and close button --- */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #E0E6ED; /* Or use var(--border-color) */
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.modal-close-btn {
+    font-size: 1.8rem;
+    color: #aaa;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    line-height: 1; /* Aligns the '×' better */
+}
+
+/* --- Main message area --- */
+.modal-body {
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.modal-body p {
+    margin: 0;
+}
+
+/* --- Footer for action buttons --- */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #E0E6ED; /* Or use var(--border-color) */
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* --- General button styling --- */
+.modal-btn {
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+/* --- Confirm/OK button (Gold) --- */
+.modal-btn-confirm {
+    background-color: #E8B957; /* Or use var(--header-color) */
+    color: #1A1A1A;       /* Or use var(--sidebar-bg) */
+}
+.modal-btn-confirm:hover {
+    background-color: #d4a74a;
+}
+
+/* --- Cancel button (Grey) --- */
+.modal-btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+.modal-btn-cancel:hover {
+    background-color: #5a6268;
+}

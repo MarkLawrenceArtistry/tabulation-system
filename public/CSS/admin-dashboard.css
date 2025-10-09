@@ -1,0 +1,236 @@
+/* --- Root Variables --- */
+:root {
+    --primary-bg: #F7F9FC;
+    --sidebar-bg: #1A1A1A; /* Dark sidebar */
+    --container-bg: #FFFFFF;
+    --text-color: #3C4858;
+    --sidebar-text-color: #F5F5F5;
+    --header-color: #E8B957; /* Gold Accent */
+    --border-color: #E0E6ED;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --button-danger-bg: #dc3545;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* --- Main Dashboard Layout --- */
+.dashboard-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.main-content {
+    flex-grow: 1; /* Takes up remaining space */
+    overflow-y: auto; /* Allows only content to scroll */
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Sidebar Styling --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text-color);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    box-sizing: border-box;
+    flex-shrink: 0; /* Prevents sidebar from shrinking */
+}
+
+.sidebar-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    color: var(--header-color);
+}
+
+.sidebar-header span {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.sidebar-nav a {
+    display: block;
+    color: var(--sidebar-text-color);
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+    background-color: #2C2C2C;
+}
+
+/* Style for the active page link */
+.sidebar-nav a.active {
+    background-color: var(--header-color);
+    color: var(--sidebar-bg);
+    font-weight: bold;
+}
+
+#logout-btn {
+    margin-top: auto; /* Pushes logout to the bottom */
+}
+
+/* --- Append this to your existing style.css file --- */
+
+/* --- Portions Page Specific Layout --- */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Form takes 1 part, list takes 2 parts */
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* --- Portion List Styling --- */
+#portions-list-container {
+    background-color: var(--container-bg);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+#portions-list-container h2 {
+    margin-top: 0;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+#portions-container .portion-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
+}
+
+#portions-container .portion-item:last-child {
+    border-bottom: none;
+}
+
+#portions-container .portion-item:hover {
+    background-color: #f8f9fa;
+}
+
+.portion-details span {
+    display: block;
+}
+
+.portion-name {
+    font-weight: bold;
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.portion-status {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Re-use delete button style from previous pages */
+.portion-item .delete-btn {
+    padding: 6px 12px;
+    background-color: var(--button-danger-bg);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+/* Responsive adjustments for the grid */
+@media (max-width: 992px) {
+    .content-grid {
+        grid-template-columns: 1fr; /* Stack on smaller screens */
+    }
+}
+
+
+/* --- Content Styling (Your Existing Styles) --- */
+h1 {
+    text-align: center;
+    color: var(--header-color);
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+
+.filter-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: var(--container-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.filter-container select,
+.filter-container input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+#judge-scores-container {
+    background-color: var(--container-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.scores-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.scores-table th,
+.scores-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.scores-table thead {
+    background-color: #F8F9FA;
+}
+
+.scores-table th {
+    font-weight: 600;
+    color: #6C757D;
+}
+
+.scores-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.delete-btn {
+    padding: 6px 12px;
+    background-color: var(--button-danger-bg);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

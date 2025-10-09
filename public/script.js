@@ -48,11 +48,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.querySelector('#custom-modal');
     const modalMessage = document.querySelector('#modal-message');
     const modalCloseBtn = document.querySelector('.modal-close-btn');
+        // --- Logout Button Functionality ---
+const logoutBtn = document.querySelector('#logout-btn');
+
+
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevents the link from trying to navigate anywhere
+
+        // Use your existing confirmation modal for a smooth user experience
+        showConfirmationModal(
+            'Confirm Logout',
+            'Are you sure you want to log out of the admin panel?',
+            () => { // This function will only run if the user clicks the "Confirm" button
+                
+                // 1. Clear all the user's session data from local storage
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('role');
+                localStorage.removeItem('judge_id');
+                
+                // 2. Redirect the user back to the login page
+                window.location.href = 'index.html';
+            }
+        );
+    });
+}
 
     // --- Modal Functions ---  
     /**
     * Displays the custom modal with a specific message.
  * @param {string} message The message to show in the modal.
+ * @param {string} message - The message to display.
  */
     function showModal(message) {
         if (!modal || !modalMessage) return;
@@ -75,6 +101,56 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    /** Candidates Confirmation and Validation Modal **/
+    
+
+    function showAlertModal(title, message) {
+    if (!modal) return;
+    modal.querySelector('#modal-title').textContent = title;
+    modal.querySelector('#modal-message').textContent = message;
+
+    const footer = modal.querySelector('.modal-footer');
+    footer.innerHTML = `<button class="modal-btn modal-btn-confirm">OK</button>`;
+    
+    footer.querySelector('.modal-btn-confirm').onclick = () => hideModal();
+    modal.querySelector('.modal-close-btn').onclick = () => hideModal();
+
+    modal.classList.remove('modal-hidden');
+}
+
+/**
+ Candidates Confirmation and Validation Modal
+  @param {string} title - The title for the modal.
+ * @param {string} message - The confirmation question.
+ * @param {Function} onConfirm - The function to call if the user clicks "Confirm".
+ */
+function showConfirmationModal(title, message, onConfirm) {
+    if (!modal) return;
+    modal.querySelector('#modal-title').textContent = title;
+    modal.querySelector('#modal-message').textContent = message;
+
+    const footer = modal.querySelector('.modal-footer');
+    footer.innerHTML = `
+        <button class="modal-btn modal-btn-cancel">Cancel</button>
+        <button class="modal-btn modal-btn-confirm">Confirm</button>
+    `;
+
+    footer.querySelector('.modal-btn-confirm').onclick = () => {
+        hideModal();
+        onConfirm(); // Execute the callback
+    };
+    footer.querySelector('.modal-btn-cancel').onclick = () => hideModal();
+    modal.querySelector('.modal-close-btn').onclick = () => hideModal();
+
+    modal.classList.remove('modal-hidden');
+}
+
+function hideModal() {
+    if (modal) modal.classList.add('modal-hidden');
+}
+
+
 
     
     // INITIALIZERS
@@ -182,27 +258,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // PORTIONS
-    if(portionsForm) {
-        portionsForm.addEventListener('submit', async (e) => {
-            e.preventDefault()
+    if (portionsForm) {
+    portionsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-            const data = {
-                name: document.querySelector('#portion-name').value,
-                status: document.querySelector('#portion-status').value
-            }
+        // --- Client-Side Validation ---
+        const nameInput = document.querySelector('#portion-name');
+        const statusInput = document.querySelector('#portion-status');
 
-            console.log(data)
+        const name = nameInput.value.trim();
+        const status = statusInput.value.trim();
 
-            try {
-                await api.addPortion(data)
-                alert('Added portion successfully')
-            } catch(err) {
-                console.error(err)
-            }
+        // Check if the fields are empty
+        if (!name || !status) {
+            showAlertModal('Validation Error', 'Please fill out both Portion Name and Status.');
+            return; // Stop the form submission
+        }
 
-            loadPortions()
-        })
-    }
+        const data = {
+            name: name,
+            status: status
+        };
+
+        try {
+            await api.addPortion(data);
+            // Use the modal for the success message
+            showAlertModal('Success', 'Portion added successfully!');
+            portionsForm.reset(); // Clear the form
+        } catch (err) {
+            // Use the modal for any errors
+            showAlertModal('Submission Error', `An error occurred: ${err.message}`);
+            console.error(err);
+        }
+
+        loadPortions(); // Reload the list of portions
+    });
+}
+
+
     if(judgePortionsContainer) {
         judgePortionsContainer.addEventListener('click', async (e) => {
             if (e.target.matches('.portions-btn')) {
@@ -239,54 +332,88 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    if(portionsContainer) {
-        portionsContainer.addEventListener('click', async (e) => {
-            e.preventDefault()
 
-            const target = e.target
-            const portionItem = target.closest('.portion-item');
-            if (!portionItem) return;
 
-            const portionID = portionItem.dataset.id
+    if (portionsContainer) {
+    portionsContainer.addEventListener('click', (e) => {
+        const target = e.target;
 
-            // for delete
-            if(target.classList.contains('delete-btn')) {
-                if(confirm('Are you sure you want to delete this specific portion?')) {
+        // Find the specific portion item that was clicked inside
+        const portionItem = target.closest('.portion-item');
+        if (!portionItem) return; // If the click wasn't on a portion, do nothing
+
+        // Handle the delete button click
+        if (target.classList.contains('delete-btn')) {
+            const portionID = portionItem.dataset.id; // Get the ID from the portion item
+
+            // Use the confirmation modal
+            showConfirmationModal(
+                'Delete Portion',
+                'Are you sure you want to delete this portion? This action cannot be undone.',
+                async () => { // This function only runs if the user clicks "Confirm"
                     try {
-                        await api.deletePortion(portionID)
-                        loadPortions()
-                    } catch(err) {
-                        console.error(err)
+                        await api.deletePortion(portionID);
+                        showAlertModal('Success', 'Portion deleted successfully!');
+                        loadPortions(); // Reload the list
+                    } catch (err) {
+                        showAlertModal('Deletion Error', `An error occurred: ${err.message}`);
+                        console.error(err);
                     }
                 }
-            }
-        })
-    }
-
-
+            );
+        }
+    });
+}
 
 
     // CRITERIA
-    if(addCriteriaForm) {
-        addCriteriaForm.addEventListener('submit', async (e) => {
-            e.preventDefault()
+    if (addCriteriaForm) {
+    addCriteriaForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-            const data = {
-                portion_id: document.querySelector('#criteria-portion-id').value,
-                name: document.querySelector('#criteria-name').value,
-                max_score: document.querySelector('#criteria-max-score').value,
-            }
+        // --- Client-Side Validation ---
+        const nameInput = document.querySelector('#criteria-name');
+        const portionIdInput = document.querySelector('#criteria-portion-id');
+        const maxScoreInput = document.querySelector('#criteria-max-score');
 
-            try {
-                await api.addCriteria(data)
-                alert('Added criteria successfully')
-            } catch(err) {
-                console.error(err)
-            }
+        const name = nameInput.value.trim();
+        const portionId = portionIdInput.value.trim();
+        const maxScore = maxScoreInput.value.trim();
 
-            loadCriteria()
-        })
-    }
+        // 1. Check if fields are empty
+        if (!name || !portionId || !maxScore) {
+            showAlertModal('Validation Error', 'Please fill out all required fields.');
+            return; // Stop the submission
+        }
+
+        // 2. Check if numbers are valid
+        if (isNaN(parseInt(portionId)) || isNaN(parseInt(maxScore))) {
+            showAlertModal('Validation Error', 'Portion ID and Max Score must be valid numbers.');
+            return; // Stop the submission
+        }
+
+        const data = {
+            portion_id: parseInt(portionId),
+            name: name,
+            max_score: parseInt(maxScore),
+        };
+
+        try {
+            await api.addCriteria(data);
+            // Use the modal for the success message
+            showAlertModal('Success', 'Criterion added successfully!');
+            addCriteriaForm.reset(); // Clear the form on success
+        } catch (err) {
+            // Use the modal for any errors
+            showAlertModal('Submission Error', `An error occurred: ${err.message}`);
+            console.error(err);
+        }
+
+        loadCriteria(); // Reload the list of criteria
+    });
+}
+
+
     if(criteriaContainer) {
         criteriaContainer.addEventListener('click', async (e) => {
             e.preventDefault()
@@ -315,34 +442,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // CANDIDATES
-    if(candidateForm) {
-        candidateForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+   if (candidateForm) {
+    candidateForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-            const formData = new FormData(candidateForm);
-            const id = candidateIdInput.value;
+        // --- Client-Side Validation ---
+        const fullName = document.querySelector('#full_name').value.trim();
+        const course = document.querySelector('#course').value.trim();
+        const section = document.querySelector('#section').value.trim();
+        const school = document.querySelector('#school').value.trim();
+        const category = document.querySelector('#category').value.trim();
 
-            if (!id && !formData.get('image').name) {
-                alert('Image is required for new candidates.');
-                return;
+        if (!fullName || !course || !section || !school || !category) {
+            showAlertModal('Validation Error', 'Please fill out all required fields.');
+            return; 
+        }
+
+        const formData = new FormData(candidateForm);
+        const id = candidateIdInput.value;
+
+        // Validation for new candidates needing an image
+        if (!id && !formData.get('image').name) {
+            showAlertModal('Validation Error', 'An image is required for new candidates.');
+            return;
+        }
+
+        try {
+            if (id) {
+                await api.updateCandidate(id, formData);
+                showAlertModal('Success', 'Candidate updated successfully!');
+            } else {
+                await api.addCandidate(formData);
+                showAlertModal('Success', 'Candidate added successfully!');
             }
+            resetForm();
+            loadCandidatesAsAdmin();
+        } catch (err) {
+            console.error('Form submission failed:', err);
+            showAlertModal('Submission Error', `An error occurred: ${err.message}`);
+        }
+    });
+}
 
-            try {
-                if (id) {
-                    await api.updateCandidate(id, formData);
-                    alert('Candidate updated successfully!');
-                } else {
-                    await api.addCandidate(formData);
-                    alert('Candidate added successfully!');
-                }
-                resetForm();
-                loadCandidatesAsAdmin();
-            } catch (err) {
-                console.error('Form submission failed:', err);
-                alert(`Error: ${err.message}`);
-            }
-        });
-    }
     const resetForm = () => {
         candidateForm.reset();
         candidateIdInput.value = '';
@@ -372,21 +513,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleEdit = (id) => {
         populateFormForEdit(id);
     };
+
+
     const handleDelete = async (id) => {
-        if (confirm('Are you sure you want to delete this candidate? This cannot be undone.')) {
+    // New confirmation logic using the modal
+    showConfirmationModal(
+        'Delete Candidate',
+        'Are you sure you want to delete this candidate? This action cannot be undone.',
+        async () => { // This function runs only if "Confirm" is clicked
             try {
                 await api.deleteCandidate(id);
-                alert('Candidate deleted successfully!');
+                showAlertModal('Success', 'Candidate deleted successfully!');
                 loadCandidatesAsAdmin();
             } catch (err) {
                 console.error('Deletion failed:', err);
-                alert(`Error: ${err.message}`);
+                showAlertModal('Deletion Error', `An error occurred: ${err.message}`);
             }
         }
-    };
-    if(cancelBtn) {
-        cancelBtn.addEventListener('click', resetForm);
-    }
+    );
+};
 
 
 
@@ -515,34 +660,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 }
-    if(registerForm) {
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault()
+    if (registerForm) {
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-            const credentials = {
-                username: document.querySelector('#username-register').value,
-                password: document.querySelector('#password-register').value,
-                full_name: document.querySelector('#fullname').value,
-                role: document.querySelector('#role').value
+        // --- Client-Side Validation ---
+        const fullName = document.querySelector('#fullname').value.trim();
+        const role = document.querySelector('#role').value;
+        const username = document.querySelector('#username-register').value.trim();
+        const password = document.querySelector('#password-register').value.trim();
+
+        if (!fullName || !role || !username || !password) {
+            showAlertModal('Validation Error', 'Please fill out all fields before submitting.');
+            return; // Stop the form submission
+        }
+
+        const credentials = {
+            full_name: fullName,
+            role: role,
+            username: username,
+            password: password,
+        };
+
+        try {
+            const result = await api.registerUser(credentials);
+
+            if (result.success) {
+                // Use the modal for the success message
+                showAlertModal('Success', 'User has been registered successfully!');
+                registerForm.reset(); // Clear the form
+            } else {
+                // Use the modal for API errors (e.g., username already exists)
+                showAlertModal('Registration Error', result.data || 'An unknown error occurred.');
             }
-
-            try {
-                const result = await api.registerUser(credentials)
-
-                if(result.success) {
-                    alert('Succesfully registered!')
-                    registerForm.reset()
-                } else {
-                    alert(result.data)
-                    registerForm.reset()
-                }
-            } catch (err) {
-                alert('Wrong credentials')
-                loginForm.reset()
-                console.error(err)
-            }
-        })
-    }
+        } catch (err) {
+            // Use the modal for network or other critical errors
+            showAlertModal('Submission Error', `An error occurred: ${err.message}`);
+            console.error(err);
+        }
+    });
+}
 
 
 
@@ -676,3 +833,4 @@ if (searchInput) searchInput.addEventListener('input', applyFilters);
         window.location.href = 'index.html'
     }
 })
+

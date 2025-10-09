@@ -3,30 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Admin - Register User</title>
+    <link rel="stylesheet" href="CSS/register.css"> <!-- Use the same admin stylesheet -->
 </head>
 <body>
-    <form id="register-form">
-        <div>
-            <label class="small-lbl">Full Name</label>
-            <input type="text" id="fullname" placeholder="Type your full name">
+    <div class="dashboard-wrapper">
+        <!-- Admin Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+                <span>DCSA Pageant 2025</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html">Scores</a>
+                <a href="candidates.html">Candidates</a>
+                <a href="portions.html">Portions</a>
+                <a href="criteria.html">Criteria</a>
+                <a href="tabulation.html">Tabulation</a>
+                <a href="register.html" class="active">Register User</a> <!-- Set as active -->
+                <a href="#" id="logout-btn">Logout</a>
+            </nav>
         </div>
-        <div>
-            <label class="small-lbl">Role</label>
-            <input type="text" id="role" placeholder="Type the role">
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="container">
+                <h1>Register New User</h1>
+
+                <!-- A single, centered form container -->
+                <div class="form-container" style="max-width: 600px; margin: 0 auto;">
+                    <form id="register-form">
+                        <h2>Create a New Account</h2>
+                        
+                        <div>
+                            <label for="fullname">Full Name</label>
+                            <input type="text" id="fullname" placeholder="Enter user's full name" required>
+                        </div>
+                        
+                        <div>
+                            <label for="role">Role</label>
+                            <select id="role" required>
+                                <option value="" disabled selected>-- Select a Role --</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Judge">Judge</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="username-register">Username</label>
+                            <input type="text" id="username-register" placeholder="Create a username" required>
+                        </div>
+
+                        <div>
+                            <label for="password-register">Password</label>
+                            <input type="password" id="password-register" placeholder="Create a password" required>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit">Register Account</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div>
-            <label class="small-lbl">Username</label>
-            <input type="text" id="username-register" placeholder="Type your username">
-        </div>
-        <div>
-            <label class="small-lbl">Password</label>
-            <input type="password" id="password-register" placeholder="Type your password">
-        </div>
-        <div>
-            <button type="submit">Register</button>
-        </div>
-    </form>
+    </div>
 
     <script src="script.js" type="module"></script>
 </body>

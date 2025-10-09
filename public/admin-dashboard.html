@@ -3,31 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="admin-dashboard.css">
+    <title>Admin Dashboard - Scores</title>
+    <link rel="stylesheet" href="CSS/admin-dashboard.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Manage Judge Scores</h1>
-
-        <!-- Filtering Section -->
-        <div class="filter-container">
-            <select id="judge-filter">
-                <option value="">Filter by Judge</option>
-            </select>
-            <select id="candidate-filter">
-                <option value="">Filter by Candidate</option>
-            </select>
-            <select id="portion-filter">
-                <option value="">Filter by Portion</option>
-            </select>
-            <input type="text" id="search-input" placeholder="Search by criteria...">
+    <div class="dashboard-wrapper">
+        <!-- Modern Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+                <span>DCSA Pageant 2025</span>
+            </div>
+            <nav class="sidebar-nav">
+                <!-- 'active' class highlights the current page -->
+                <a href="admin-dashboard.html" class="active">Scores</a>
+                <a href="candidates.html">Candidates</a>
+                <a href="portions.html">Portions</a>
+                <a href="criteria.html">Criteria</a>
+                <a href="tabulation.html">Tabulation</a>
+                <a href="register.html">Register User</a>
+                <a href="#" id="logout-btn">Logout</a>
+            </nav>
         </div>
 
-        <!-- Scores Table will be displayed here -->
-         
-        <div id="judge-scores-container">
-          
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="container">
+                <h1>Manage Judge Scores</h1>
+
+                <!-- Filtering Section -->
+                <div class="filter-container">
+                    <select id="judge-filter">
+                        <option value="">Filter by Judge</option>
+                    </select>
+                    <select id="candidate-filter">
+                        <option value="">Filter by Candidate</option>
+                    </select>
+                    <select id="portion-filter">
+                        <option value="">Filter by Portion</option>
+                    </select>
+                    <input type="text" id="search-input" placeholder="Search by criteria...">
+                </div>
+
+                <!-- Scores Table will be displayed here -->
+                <div id="judge-scores-container">
+                    <!-- The table will be dynamically inserted here by your script.js -->
+                </div>
+            </div>
         </div>
     </div>
 

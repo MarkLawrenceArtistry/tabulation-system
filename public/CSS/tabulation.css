@@ -1,0 +1,203 @@
+/* --- Root Variables --- */
+:root {
+    --primary-bg: #F7F9FC;
+    --sidebar-bg: #1A1A1A; /* Dark sidebar */
+    --container-bg: #FFFFFF;
+    --text-color: #3C4858;
+    --sidebar-text-color: #F5F5F5;
+    --header-color: #E8B957; /* Gold Accent */
+    --border-color: #E0E6ED;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --button-danger-bg: #dc3545;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* --- Main Dashboard Layout --- */
+.dashboard-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.main-content {
+    flex-grow: 1; /* Takes up remaining space */
+    overflow-y: auto; /* Allows only content to scroll */
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Sidebar Styling --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text-color);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    box-sizing: border-box;
+    flex-shrink: 0; /* Prevents sidebar from shrinking */
+}
+
+.sidebar-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    color: var(--header-color);
+}
+
+.sidebar-header span {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.sidebar-nav a {
+    display: block;
+    color: var(--sidebar-text-color);
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+    background-color: #2C2C2C;
+}
+
+/* Style for the active page link */
+.sidebar-nav a.active {
+    background-color: var(--header-color);
+    color: var(--sidebar-bg);
+    font-weight: bold;
+}
+
+#logout-btn {
+    margin-top: auto; /* Pushes logout to the bottom */
+}
+
+/* --- Append this to your existing style.css file --- */
+
+/* --- Tabulation Page Styling --- */
+
+/* Styles the white box for the dropdown select */
+.controls-container {
+    background-color: var(--container-bg);
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.controls-container label {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+.controls-container select {
+    min-width: 300px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+/* Styles the placeholder text before a portion is selected */
+#results-container .placeholder-text {
+    background-color: var(--container-bg);
+    padding: 50px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #6c757d;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+
+/* --- Results Table Styling --- */
+/* This class will be added by ui.js */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--container-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    overflow: hidden; /* Important for border-radius on tables */
+}
+
+.results-table th,
+.results-table td {
+    padding: 18px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.results-table thead {
+    background-color: #F8F9FA;
+}
+
+.results-table th {
+    font-weight: 600;
+    color: #6C757D;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.results-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- Special Highlighting for Winners --- */
+.results-table .rank {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--primary-accent);
+}
+
+.results-table .total-score {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Gold for 1st place */
+.results-table tr.rank-first {
+    background-color: #fffbeb; /* Light gold background */
+}
+.results-table tr.rank-first td:first-child {
+    border-left: 5px solid #FFD700;
+}
+
+/* Silver for 2nd place */
+.results-table tr.rank-second {
+    background-color: #f8f9fa; /* Light silver background */
+}
+.results-table tr.rank-second td:first-child {
+    border-left: 5px solid #C0C0C0;
+}
+
+/* Bronze for 3rd place */
+.results-table tr.rank-third {
+    background-color: #fdf5f2; /* Light bronze background */
+}
+.results-table tr.rank-third td:first-child {
+    border-left: 5px solid #CD7F32;
+}

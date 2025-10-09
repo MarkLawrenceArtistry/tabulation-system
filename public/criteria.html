@@ -3,33 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Criteria</title>
+    <title>Admin - Manage Criteria</title>
+    <link rel="stylesheet" href="CSS/criteria.css"> <!-- Use the same admin stylesheet -->
 </head>
 <body>
-    <h1>Manage Criteria</h1>
-    <form id="add-criteria-form">
-        <div>
-            <label>Criteria Name</label>
-            <input type="text" id="criteria-name" placeholder="Enter your criteria" required>
+    <div class="dashboard-wrapper">
+        <!-- Admin Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+                <span>DCSA Pageant 2025</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html">Scores</a>
+                <a href="candidates.html">Candidates</a>
+                <a href="portions.html">Portions</a>
+                <a href="criteria.html" class="active">Criteria</a> <!-- Set as active -->
+                <a href="tabulation.html">Tabulation</a>
+                <a href="register.html">Register User</a>
+                <a href="#" id="logout-btn">Logout</a>
+            </nav>
         </div>
-        <div>
-            <label>Portion ID</label>
-            <input type="text" id="criteria-portion-id" placeholder="Enter your portion id" required>
-        </div>
-        <div>
-            <label>Max Score</label>
-            <input type="text" id="criteria-max-score" placeholder="Enter your criteria max score" required>
-        </div>
-        <div>
-            <button type="submit">Submit</button>
-        </div>
-    </form>
 
-    <hr></hr>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="container">
+                <h1>Manage Criteria</h1>
 
-    <div id="criteria-container">
+                <div class="content-grid">
+                    <!-- Form Container -->
+                    <div class="form-container">
+                        <form id="add-criteria-form">
+                            <h2>Add New Criterion</h2>
+                            <div>
+                                <label for="criteria-name">Criterion Name</label>
+                                <input type="text" id="criteria-name" name="name" placeholder="e.g., Poise and Bearing" required>
+                            </div>
+                            <div>
+                                <label for="criteria-portion-id">Portion ID</label>
+                                <input type="number" id="criteria-portion-id" name="portion_id" placeholder="Enter corresponding Portion ID" required>
+                            </div>
+                            <div>
+                                <label for="criteria-max-score">Max Score</label>
+                                <input type="number" id="criteria-max-score" name="max_score" placeholder="e.g., 100" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit">Add Criterion</button>
+                            </div>
+                        </form>
+                    </div>
 
+                    <!-- Criteria List Container -->
+                    <div id="criteria-list-container">
+                        <h2>Existing Criteria</h2>
+                        <div id="criteria-container">
+                            <p>Loading criteria...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+ <div id="custom-modal" class="modal-overlay modal-hidden">
+    <div class="modal-content">
+        <!-- Modal Header with Title and Close Button -->
+        <div class="modal-header">
+            <h3 id="modal-title">Default Title</h3>
+            <span class="modal-close-btn">&times;</span>
+        </div>
+        
+        <!-- Modal Body for the main message -->
+        <div class="modal-body">
+            <p id="modal-message">This is the default message text.</p>
+        </div>
+        
+        <!-- Modal Footer for action buttons -->
+        <div class="modal-footer">
+            <!-- Buttons like "OK", "Confirm", "Cancel" will be added here by JavaScript -->
+        </div>
+    </div>
+</div>
+
     <script src="script.js" type="module"></script>
 </body>
 </html>
