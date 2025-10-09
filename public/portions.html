@@ -2,31 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width='device-width', initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Portions</title>
+    <link rel="stylesheet" href="CSS/portion.css"> <!-- This is your main admin stylesheet -->
 </head>
 <body>
-    <h1>Manage Portions</h1>
-    <form id="add-portion-form">
-        <div>
-            <label>Portion Name</label>
-            <input type="text" id="portion-name" placeholder="Enter your portion" required>
+    <div class="dashboard-wrapper">
+        <!-- Admin Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+                <span>DCSA Pageant 2025</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html">Scores</a>
+                <a href="candidates.html">Candidates</a>
+                <a href="portions.html" class="active">Portions</a> <!-- Active link -->
+                <a href="criteria.html">Criteria</a>
+                <a href="tabulation.html">Tabulation</a>
+                <a href="register.html">Register User</a>
+                <a href="#" id="logout-btn">Logout</a>
+            </nav>
         </div>
-        <div>
-            <label>Portion Status</label>
-            <input type="text" id="portion-status" placeholder="Enter your portion status" required>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="container">
+                <h1>Manage Portions</h1>
+
+                <div class="content-grid">
+                    <!-- Form Container - THIS IS THE KEY PART THAT WAS MISSING -->
+                    <div class="form-container">
+                        <form id="add-portion-form">
+                            <h2>Add New Portion</h2>
+                            <div>
+                                <label for="portion-name">Portion Name</label>
+                                <input type="text" id="portion-name" name="name" placeholder="e.g., Casual Wear" required>
+                            </div>
+                            <div>
+                                <label for="portion-status">Portion Status</label>
+                                <input type="text" id="portion-status" name="status" placeholder="e.g., Active" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit">Add Portion</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Portions List Container -->
+                    <div id="portions-list-container">
+                        <h2>Existing Portions</h2>
+                        <div id="portions-container">
+                            <p>Loading portions...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <button type="submit">Submit</button>
-        </div>
-    </form>
-
-    <hr></hr>
-
-    <div id="portions-container">
-
     </div>
+
+    <div id="custom-modal" class="modal-overlay modal-hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-title">Default Title</h3>
+            <span class="modal-close-btn">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p id="modal-message">Default message.</p>
+        </div>
+        <div class="modal-footer">
+            <!-- Buttons like "OK", "Confirm", "Cancel" will be dynamically added here by JavaScript -->
+        </div>
+    </div>
+</div>
+
     <script src="script.js" type="module"></script>
 </body>
 </html>

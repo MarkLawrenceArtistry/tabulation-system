@@ -4,10 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabulation System - Login</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
+
+    <div class="content-panel">
+        <div class="content-panel-inner">
+             <img src="../resources/DATAMEXUPLOGO.png" alt="Datamex College Logo" class="logo">
+            <h1>DCSA Pageant 2025</h1>
+            <p>Datamex College Of Saint Adeline Inc.</p>
+        </div>
+    </div>
+    
     <form id="login-form">
+        <h2>Login</h2>
         <div>
             <label class="small-lbl">Username</label>
             <input type="text" id="username" placeholder="Type your username">
@@ -20,6 +30,13 @@
             <button type="submit">Log In</button>
         </div>
     </form>
+
+    <div id="custom-modal" class="modal-overlay modal-hidden">
+        <div class="modal-content">
+            <span class="modal-close-btn">&times;</span>
+            <p id="modal-message"></p>
+        </div>
+    </div>
 
     <script src="script.js" type="module"></script>
 </body>

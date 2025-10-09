@@ -3,58 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Candidates</title>
+    <title>Admin - Manage Candidates</title>
+    <link rel="stylesheet" href="CSS/candidates.css"> <!-- We will use the same stylesheet -->
 </head>
 <body>
-    <form id="candidate-form">
-        <h2 id="form-title">Add New Candidate</h2>
-        <input type="hidden" id="candidate-id" name="id">
+    <div class="dashboard-wrapper">
+        <!-- Admin Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+                <span>DCSA Pageant 2025</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html">Scores</a>
+                <a href="candidates.html" class="active">Candidates</a> <!-- Set as active -->
+                <a href="portions.html">Portions</a>
+                <a href="criteria.html">Criteria</a>
+                <a href="tabulation.html">Tabulation</a>
+                <a href="register.html">Register User</a>
+                <a href="#" id="logout-btn">Logout</a>
+            </nav>
+        </div>
 
-        <div>
-            <label>Full Name</label>
-            <input type="text" id="full_name" name="full_name" placeholder="Enter full name" required>
-        </div>
-        <div>
-            <label>Course</label>
-            <input type="text" id="course" name="course" placeholder="Enter course" required>
-        </div>
-        <div>
-            <label>Section</label>
-            <input type="text" id="section" name="section" placeholder="Enter section" required>
-        </div>
-        <div>
-            <label>School</label>
-            <input type="text" id="school" name="school" placeholder="Enter school" required>
-        </div>
-        <div>
-            <label>Category</label>
-            <input type="text" id="category" name="category" placeholder="Enter category" required>
-        </div>
-        <div>
-            <label>Assign to Portions</label>
-            <div id="portions-checkboxes">
-                <p>Loading portions...</p>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="container">
+                <h1>Manage Candidates</h1>
+
+                <!-- Form Container -->
+                <div class="form-container">
+                    <form id="candidate-form">
+                        <h2 id="form-title">Add New Candidate</h2>
+                        <input type="hidden" id="candidate-id" name="id">
+
+                        <div class="form-grid">
+                            <div>
+                                <label>Full Name</label>
+                                <input type="text" id="full_name" name="full_name" placeholder="Enter full name" required>
+                            </div>
+                            <div>
+                                <label>Course/Strand</label>
+                                <input type="text" id="course" name="course" placeholder="Enter course/Strand" required>
+                            </div>
+                            <div>
+                                <label>Section</label>
+                                <input type="text" id="section" name="section" placeholder="Enter section" required>
+                            </div>
+                            <div>
+                                <label>School</label>
+                                <input type="text" id="school" name="school" placeholder="Enter school" required>
+                            </div>
+                            <div class="full-width">
+                                <label>Category</label>
+                                <input type="text" id="category" name="category" placeholder="Enter category" required>
+                            </div>
+                            <div class="full-width">
+                                <label>Assign to Portions</label>
+                                <div id="portions-checkboxes" class="checkbox-group">
+                                    <p>Loading portions...</p>
+                                </div>
+                            </div>
+                            <div class="full-width">
+                                <label>Image</label>
+                                <input type="file" id="image" name="image">
+                                <small>Leave blank if you don't want to change the existing image.</small>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" id="submit-btn">Add Candidate</button>
+                            <button type="button" id="cancel-btn" style="display: none;">Cancel Edit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Candidates List Container -->
+                <div id="candidates-list-container">
+                    <h2>Existing Candidates</h2>
+                    <div id="candidates-table">
+                        <p>Loading candidates...</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div>
-            <label>Image</label>
-            <input type="file" id="image" name="image">
-            <small>Leave blank if you don't want to change the existing image when editing.</small>
-        </div>
-        <div>
-            <button type="submit" id="submit-btn">Add Candidate</button>
-            <button type="button" id="cancel-btn" style="display: none;">Cancel Edit</button>
-        </div>
-    </form>
+    </div>
 
-
-    <div id="candidates-list-container">
-        <h2>Existing Candidates</h2>
-        <div id="candidates-table">
-            <p>Loading candidates...</p>
+        <div id="custom-modal" class="modal-overlay modal-hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Default Title</h3>
+                <span class="modal-close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message">Default message.</p>
+            </div>
+            <div class="modal-footer">
+                <!-- Buttons will be dynamically added here -->
+            </div>
         </div>
     </div>
 
     <script src="script.js" type="module"></script>
 </body>
 </html>
+
+ 

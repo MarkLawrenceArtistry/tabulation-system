@@ -1,0 +1,189 @@
+
+/* --- Root Variables --- */
+:root {
+    --primary-bg: #F7F9FC;
+    --sidebar-bg: #1A1A1A; /* Dark sidebar */
+    --container-bg: #FFFFFF;
+    --text-color: #3C4858;
+    --sidebar-text-color: #F5F5F5;
+    --header-color: #E8B957; /* Gold Accent */
+    --border-color: #E0E6ED;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --button-danger-bg: #dc3545;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* --- Main Dashboard Layout --- */
+.dashboard-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.main-content {
+    flex-grow: 1; /* Takes up remaining space */
+    overflow-y: auto; /* Allows only content to scroll */
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Sidebar Styling --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text-color);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    box-sizing: border-box;
+    flex-shrink: 0; /* Prevents sidebar from shrinking */
+}
+
+.sidebar-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    color: var(--header-color);
+}
+
+.sidebar-header span {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.sidebar-nav a {
+    display: block;
+    color: var(--sidebar-text-color);
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+    background-color: #2C2C2C;
+}
+
+/* Style for the active page link */
+.sidebar-nav a.active {
+    background-color: var(--header-color);
+    color: var(--sidebar-bg);
+    font-weight: bold;
+}
+
+#logout-btn {
+    margin-top: auto; /* Pushes logout to the bottom */
+}
+
+/* --- Append this to your existing style.css file --- */
+
+/* --- Styling for Select Dropdowns in Forms --- */
+
+.form-container {
+    background-color: var(--container-bg); /* #FFFFFF */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow); /* 0 4px 12px rgba(0, 0, 0, 0.05) */
+}
+
+/* --- Form Elements Styling --- */
+
+/* Styles the "Create a New Account" title */
+.form-container h2 {
+    margin-top: 0;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+/* Styles all the labels ("Full Name", "Role", etc.) */
+.form-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+/* Styles all text, password, and select input fields consistently */
+.form-container input[type="text"],
+.form-container input[type="password"],
+.form-container select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Ensures padding doesn't affect the width */
+    margin-bottom: 20px; /* Adds space between each form field */
+}
+
+/* Adds a custom dropdown arrow to the <select> element for a modern look */
+.form-container select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236C757D%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: .65em auto;
+}
+
+/* Styles the container for the submit button */
+.form-container .form-actions {
+    margin-top: 10px;
+}
+
+/* Styles the "Register Account" button */
+.form-container .form-actions button {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: var(--header-color); /* Gold color */
+    color: var(--sidebar-bg); /* Dark text */
+    transition: background-color 0.3s ease;
+}
+
+.form-container .form-actions button:hover {
+     background-color: #d4a74a; /* A slightly darker gold for hover effect */
+}
+
+.form-container select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    /* Appearance is for cross-browser consistency */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236C757D%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: .65em auto;
+}

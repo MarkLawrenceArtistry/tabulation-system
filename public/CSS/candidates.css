@@ -1,0 +1,372 @@
+/* --- Root Variables --- */
+:root {
+    --primary-bg: #F7F9FC;
+    --sidebar-bg: #1A1A1A; /* Dark sidebar */
+    --container-bg: #FFFFFF;
+    --text-color: #3C4858;
+    --sidebar-text-color: #F5F5F5;
+    --header-color: #E8B957; /* Gold Accent */
+    --border-color: #E0E6ED;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --button-danger-bg: #dc3545;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* --- Main Dashboard Layout --- */
+.dashboard-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.main-content {
+    flex-grow: 1; /* Takes up remaining space */
+    overflow-y: auto; /* Allows only content to scroll */
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Sidebar Styling --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text-color);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    box-sizing: border-box;
+    flex-shrink: 0; /* Prevents sidebar from shrinking */
+}
+
+.sidebar-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    color: var(--header-color);
+}
+
+.sidebar-header span {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.sidebar-nav a {
+    display: block;
+    color: var(--sidebar-text-color);
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+    background-color: #2C2C2C;
+}
+
+/* Style for the active page link */
+.sidebar-nav a.active {
+    background-color: var(--header-color);
+    color: var(--sidebar-bg);
+    font-weight: bold;
+}
+
+#logout-btn {
+    margin-top: auto; /* Pushes logout to the bottom */
+}
+
+
+/* --- Append this to your existing style.css file --- */
+
+/* --- Candidate Form Styling --- */
+.form-container,
+#candidates-list-container {
+    background-color: var(--container-bg);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+}
+
+#candidate-form h2 {
+    margin-top: 0;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns layout */
+    gap: 20px;
+}
+
+.form-grid .full-width {
+    grid-column: 1 / -1; /* Makes an element span both columns */
+}
+
+#candidate-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+#candidate-form input[type="text"],
+#candidate-form input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Important for width calculation */
+}
+
+#candidate-form input[type="file"] {
+    padding: 7px;
+}
+
+#candidate-form small {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Checkbox Group Styling */
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.checkbox-group div {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Form Actions (Buttons) */
+.form-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+.form-actions button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#submit-btn {
+    background-color: var(--header-color);
+    color: var(--sidebar-bg);
+}
+
+#cancel-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+
+/* --- Existing Candidates Table Styling --- */
+#candidates-list-container h2 {
+    margin-top: 0;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+/* Re-use the scores-table styles for consistency */
+.candidates-table-class { /* This class will be added by ui.js */
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.candidates-table-class th,
+.candidates-table-class td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.candidates-table-class thead {
+    background-color: #F8F9FA;
+}
+
+.candidates-table-class th {
+    font-weight: 600;
+    color: #6C757D;
+}
+
+.candidate-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.candidates-table-class .edit-btn,
+.candidates-table-class .delete-btn,
+.criteria-table-class .edit-btn,
+.criteria-table-class .delete-btn {
+    padding: 8px 16px;      /* Gives the buttons some breathing room */
+    border: none;             /* Removes the default browser border */
+    border-radius: 6px;       /* Adds modern rounded corners */
+    color: white;             /* Sets the text color to white */
+    font-size: 0.9rem;        /* Slightly smaller, cleaner font size */
+    font-weight: 500;       /* Makes the text bold but not too heavy */
+    cursor: pointer;          /* Shows a hand cursor on hover */
+    margin-right: 5px;        /* Adds space between the buttons */
+    transition: background-color 0.2s ease, transform 0.2s ease; /* Smooth transition for hover effects */
+}
+
+/* --- Specific Colors for Edit and Delete Buttons --- */
+
+/* Edit button style (Blue) */
+.candidates-table-class .edit-btn,
+.criteria-table-class .edit-btn {
+    background-color: #007bff; /* A standard, professional blue */
+}
+
+/* Delete button style (Red) */
+.candidates-table-class .delete-btn,
+.criteria-table-class .delete-btn {
+    background-color: #dc3545; /* A standard, clear red for danger actions */
+}
+
+
+/* --- Hover Effects --- */
+
+/* Darkens the Edit button on hover */
+.candidates-table-class .edit-btn:hover,
+.criteria-table-class .edit-btn:hover {
+    background-color: #0056b3; /* A darker shade of blue */
+    transform: translateY(-1px); /* Lifts the button slightly */
+}
+
+/* Darkens the Delete button on hover */
+.candidates-table-class .delete-btn:hover,
+.criteria-table-class .delete-btn:hover {
+    background-color: #c82333; /* A darker shade of red */
+    transform: translateY(-1px);
+}
+
+/* --- Modal Styles --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.modal-hidden {
+    opacity: 0;
+    pointer-events: none; /* Prevents interaction when hidden */
+}
+
+.modal-content {
+    background-color: var(--container-bg);
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 450px;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.modal-hidden .modal-content {
+    transform: scale(0.9);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-color);
+}
+
+.modal-close-btn {
+    font-size: 1.8rem;
+    color: #aaa;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid var(--border-color);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.modal-btn {
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal-btn-confirm {
+    background-color: var(--header-color);
+    color: var(--sidebar-bg);
+}
+
+.modal-btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* The delete button style is already in your CSS */

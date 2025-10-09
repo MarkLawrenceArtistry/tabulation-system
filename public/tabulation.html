@@ -3,26 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabulation Results</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Admin - Tabulation Results</title>
+    <link rel="stylesheet" href="CSS/tabulation.css"> <!-- Use the same admin stylesheet -->
 </head>
 <body>
-    <header>
-        <h1>Tabulation Results</h1>
-    </header>
-
-    <main>
-        <div id="controls">
-            <label for="portion-select"><h3>Select a Portion to View Results:</h3></label>
-            <select id="portion-select">
-                <option value="">-- Please choose a portion --</option>
-            </select>
+    <div class="dashboard-wrapper">
+        <!-- Admin Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+                <span>DCSA Pageant 2025</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html">Scores</a>
+                <a href="candidates.html">Candidates</a>
+                <a href="portions.html">Portions</a>
+                <a href="criteria.html">Criteria</a>
+                <a href="tabulation.html" class="active">Tabulation</a> <!-- Set as active -->
+                <a href="register.html">Register User</a>
+                <a href="#" id="logout-btn">Logout</a>
+            </nav>
         </div>
 
-        <div id="results-container">
-            <p>Please select a portion to see the results.</p>
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="container">
+                <h1>Tabulation Results</h1>
+
+                <!-- Controls Container -->
+                <div class="controls-container">
+                    <label for="portion-select">Select a Portion to View Results:</label>
+                    <select id="portion-select">
+                        <option value="">-- Please choose a portion --</option>
+                    </select>
+                </div>
+
+                <!-- Results Container -->
+                <div id="results-container">
+                    <p class="placeholder-text">Please select a portion to see the results.</p>
+                </div>
+            </div>
         </div>
-    </main>
+    </div>
 
     <script src="script.js" type="module"></script>
 </body>

@@ -34,6 +34,7 @@ export const renderCandidatesTable = (candidates, container, onEdit, onDelete) =
     }
 
     const table = document.createElement('table');
+    table.className = 'candidates-table-class';
     table.innerHTML = `
         <thead>
             <tr>
@@ -81,16 +82,18 @@ export const renderCandidatesTable = (candidates, container, onEdit, onDelete) =
 
 
 // SCORES
-export const renderScores = (scores, divContainer) => {
-    divContainer.innerHTML = ``
 
-    if(scores.length === 0) {
-        divContainer.innerHTML = `<p style="text-align:center;">No scores found.</p>`
-        return 
+export function renderScores(scores, container) {
+    if (!scores || scores.length === 0) {
+        container.innerHTML = '<p style="text-align: center; padding: 20px;">No scores found.</p>';
+        return;
     }
 
-    const table = document.createElement('table')
-    table.className = 'table scores'
+    // Create the table structure
+    const table = document.createElement('table');
+    table.className = 'scores-table';
+    
+    // Create table header
     table.innerHTML = `
         <thead>
             <tr>
@@ -99,95 +102,68 @@ export const renderScores = (scores, divContainer) => {
                 <th>Candidate ID</th>
                 <th>Criterion ID</th>
                 <th>Score</th>
+                <th>Action</th>
             </tr>
         </thead>
-        <tbody></tbody>
-    `
-    const tbody = table.querySelector('tbody')
+    `;
 
+    // Create table body
+    const tbody = document.createElement('tbody');
     scores.forEach(score => {
-        const row = document.createElement('tr')
-        row.className = 'score-item'
-        row.dataset.id = score.id
-
+        const row = document.createElement('tr');
+        row.className = 'score-item';
+        row.dataset.id = score.id;
+        
         row.innerHTML = `
             <td>${score.id}</td>
             <td>${score.judge_id}</td>
             <td>${score.candidate_id}</td>
             <td>${score.criterion_id}</td>
             <td>${score.score}</td>
-            <td>
-                <div class="action-buttons">
-                    <button class="btn delete-btn">Delete</button>
-                </div>
-            </td>
-        `
-
-        tbody.appendChild(row)
+            <td><button class="delete-btn">Delete</button></td>
+        `;
+        tbody.appendChild(row);
     });
+
+    table.appendChild(tbody);
     
-    divContainer.appendChild(table)
+    // Clear the container and append the new table
+    container.innerHTML = '';
+    container.appendChild(table);
 }
 
 
 
 
-// PORTIONS
-export const renderPortions = (portions, divContainer) => {
-    divContainer.innerHTML = ``
+// PORTIONS UPDATE
+export const renderPortions = (portions, container) => {
+    if (!container) return;
 
-    if(portions.length === 0) {
-        divContainer.innerHTML = `<p style="text-align:center;">No portions found.</p>`
-        return 
+    if (!portions || portions.length === 0) {
+        container.innerHTML = '<p>No portions have been added yet.</p>';
+        return;
     }
 
-    const table = document.createElement('table')
-    table.className = 'table portions'
-    table.innerHTML = `
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    `
-    const tbody = table.querySelector('tbody')
+    // Clear previous content
+    container.innerHTML = '';
 
+    // Create and append each portion item as a styled div
     portions.forEach(portion => {
-        const row = document.createElement('tr')
-        row.className = 'portion-item'
-        row.dataset.id = portion.id
+        const portionDiv = document.createElement('div');
+        portionDiv.className = 'portion-item';
+        portionDiv.dataset.id = portion.id;
 
-        let isPortionOpen = ``
-        if(portion.status !== 'open') {
-            isPortionOpen = `
-                <div class="action-buttons">
-                    <button class="btn open-btn">Start Portion</button>
-            `
-        }
-        isPortionOpen += `
-                <button class="btn edit-btn">Edit</button>
-                <button class="btn delete-btn">Delete</button>
+        portionDiv.innerHTML = `
+            <div class="portion-details">
+                <span class="portion-name">${portion.name}</span>
+                <span class="portion-status">Status: ${portion.status}</span>
             </div>
-        `
-
-        row.innerHTML = `
-            <td>${portion.id}</td>
-            <td>${portion.name}</td>
-            <td>${portion.status}</td>
-            <td>
-                ${isPortionOpen}
-            </td>
-        `
-
-        tbody.appendChild(row)
+            <button class="delete-btn">Delete</button>
+        `;
+        container.appendChild(portionDiv);
     });
-    
-    divContainer.appendChild(table)
-}
+};
+
 export const renderPortionCheckboxes = (portions, container) => {
     container.innerHTML = '';
     if (portions.length === 0) {
@@ -204,20 +180,22 @@ export const renderPortionCheckboxes = (portions, container) => {
     });
 };
 
-
-
-
 // CRITERIA
-export const renderCriteria = (criteria, divContainer) => {
-    divContainer.innerHTML = ``
+export const renderCriteria = (criteria, container) => {
+    if (!container) return;
 
-    if(criteria.length === 0) {
-        divContainer.innerHTML = `<p style="text-align:center;">No criteria found.</p>`
-        return 
+    if (!criteria || criteria.length === 0) {
+        container.innerHTML = `<p>No criteria found.</p>`;
+        return;
     }
 
-    const table = document.createElement('table')
-    table.className = 'table criteria'
+    // Clear the container first
+    container.innerHTML = '';
+
+    const table = document.createElement('table');
+    // Apply the new class that our CSS is targeting
+    table.className = 'criteria-table-class'; 
+
     table.innerHTML = `
         <thead>
             <tr>
@@ -228,14 +206,13 @@ export const renderCriteria = (criteria, divContainer) => {
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody></tbody>
-    `
-    const tbody = table.querySelector('tbody')
-
+    `;
+    
+    const tbody = document.createElement('tbody');
     criteria.forEach(criterion => {
-        const row = document.createElement('tr')
-        row.className = 'criterion-item'
-        row.dataset.id = criterion.id
+        const row = document.createElement('tr');
+        row.className = 'criterion-item';
+        row.dataset.id = criterion.id;
 
         row.innerHTML = `
             <td>${criterion.id}</td>
@@ -244,17 +221,17 @@ export const renderCriteria = (criteria, divContainer) => {
             <td>${criterion.max_score}</td>
             <td>
                 <div class="action-buttons">
-                    <button class="btn edit-btn">Edit</button>
-                    <button class="btn delete-btn">Delete</button>
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
                 </div>
             </td>
-        `
-
-        tbody.appendChild(row)
+        `;
+        tbody.appendChild(row);
     });
-    
-    divContainer.appendChild(table)
-}
+
+    table.appendChild(tbody);
+    container.appendChild(table);
+};
 
 
 
@@ -264,27 +241,34 @@ export const renderResultsTable = (results, container) => {
     container.innerHTML = '';
 
     if (results.length === 0) {
-        container.innerHTML = '<p>No scores have been submitted for this portion yet.</p>';
+        container.innerHTML = '<p class="placeholder-text">No scores have been submitted for this portion yet.</p>';
         return;
     }
 
     const table = document.createElement('table');
+    table.className = 'results-table'; // Apply our new class
+
     table.innerHTML = `
         <thead>
             <tr>
                 <th>Rank</th>
                 <th>Candidate Name</th>
                 <th>Course & School</th>
-                <th>Judges Voted</th>
+                <th style="text-align: center;">Judges Voted</th>
                 <th>Total Score</th>
             </tr>
         </thead>
-        <tbody></tbody>
     `;
-    const tbody = table.querySelector('tbody');
+    const tbody = document.createElement('tbody');
 
     results.forEach((result, index) => {
         const row = document.createElement('tr');
+
+        // --- THE UPDATE: Add special classes for the top 3 ranks ---
+        if (index === 0) row.classList.add('rank-first');
+        else if (index === 1) row.classList.add('rank-second');
+        else if (index === 2) row.classList.add('rank-third');
+
         row.innerHTML = `
             <td class="rank">${index + 1}</td>
             <td>${result.full_name}</td>
@@ -295,5 +279,6 @@ export const renderResultsTable = (results, container) => {
         tbody.appendChild(row);
     });
     
+    table.appendChild(tbody);
     container.appendChild(table);
 };
